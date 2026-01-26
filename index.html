@@ -1,0 +1,1592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Yiwen Shao | AI Researcher</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Simple, self-contained CSS -->
+  <style>
+    :root {
+      --accent: #0070f3;
+      --text: #222;
+      --muted: #666;
+      --bg: #ffffff;
+      --bg-alt: #f7f7f7;
+      --border: #e0e0e0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.6;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* Top navigation bar */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .nav-left {
+      font-weight: 600;
+      font-size: 1.05rem;
+    }
+
+    .nav-right {
+      display: flex;
+      gap: 16px;
+      font-size: 0.95rem;
+    }
+
+    .nav-right a {
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .nav-right a:hover {
+      color: var(--accent);
+    }
+
+    /* Mobile nav: stack items */
+    @media (max-width: 640px) {
+      .nav {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    main {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 24px 16px 80px;
+    }
+
+    section {
+      padding: 32px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    section:last-of-type {
+      border-bottom: none;
+    }
+
+    h1, h2, h3 {
+      margin: 0 0 12px;
+      font-weight: 600;
+    }
+
+    h1 {
+      font-size: 2rem;
+    }
+
+    h2 {
+      font-size: 1.3rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .subtitle {
+      margin: 4px 0 12px;
+      color: var(--muted);
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: minmax(0, 2.3fr) minmax(0, 1.7fr);
+      gap: 32px;
+      align-items: flex-start;
+    }
+
+    @media (max-width: 800px) {
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .chip-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 8px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .chip {
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: var(--bg-alt);
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .social-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 8px;
+      align-items: center;
+    }
+
+    .social-links a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text);
+      transition: color 0.2s ease, transform 0.2s ease;
+    }
+
+    .social-links a:hover {
+      color: var(--link);
+      transform: translateY(-2px);
+    }
+
+    .social-links svg {
+      display: block;
+    }
+
+    .project-group {
+      margin-bottom: 24px;
+    }
+
+    .project-desc {
+      font-size: 0.95rem;
+      color: var(--text);
+      margin: 6px 0 4px;
+      line-height: 1.55;
+    }
+
+    .project-accordion {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .project-block {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--bg-alt);
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .project-block summary {
+      cursor: pointer;
+      padding: 14px 16px;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-weight: 600;
+      list-style: none;
+    }
+
+    .project-block summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .project-block summary::after {
+      content: "▸";
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-left: 12px;
+      transition: transform 0.2s ease;
+    }
+
+    .project-block[open] summary::after {
+      transform: rotate(90deg);
+    }
+
+    .project-content {
+      padding: 0 16px 14px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .project-card {
+      padding: 12px;
+      border-radius: 10px;
+      background: #fff;
+      border: 1px solid var(--border);
+    }
+
+    /* Updates */
+    .updates-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      max-height: 300px;
+      overflow-y: auto;
+      padding-right: 8px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      background: #fafbfc;
+    }
+
+    .updates-list::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .updates-list::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 4px;
+    }
+
+    .updates-list::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 4px;
+    }
+
+    .updates-list::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+
+    .update-item {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 14px;
+      line-height: 1.6;
+      align-items: baseline;
+    }
+
+    .update-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .update-date {
+      flex-shrink: 0;
+      width: 70px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--muted);
+      white-space: nowrap;
+      font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+    }
+
+    .update-item > span:last-child {
+      flex: 1;
+      min-width: 0;
+      font-size: 0.95rem;
+    }
+
+    .update-item a {
+      word-wrap: break-word;
+    }
+
+    .update-item .venue {
+      color: var(--text);
+      font-style: italic;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 2px;
+    }
+
+    .update-item a.venue {
+      color: var(--text);
+      font-style: italic;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 2px;
+    }
+
+    .update-item a.venue:hover {
+      color: var(--accent);
+    }
+
+    .update-item .project-name {
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .update-item .project-name a {
+      color: var(--text);
+      font-weight: 700;
+      text-decoration: underline;
+      text-decoration-thickness: 1.5px;
+      text-underline-offset: 2px;
+    }
+
+    .update-item .link-arxiv,
+    .update-item .link-github,
+    .update-item .link-hf,
+    .update-item .link-youtube {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      text-decoration: none;
+      vertical-align: middle;
+      margin: 0 2px;
+      transition: all 0.2s ease;
+      border-radius: 3px;
+      border: 1px solid;
+    }
+
+    .update-item .link-arxiv {
+      color: #b31b1b;
+      background: #fef2f2;
+      border-color: #fecaca;
+    }
+
+    .update-item .link-arxiv:hover {
+      background: #fee2e2;
+      border-color: #fca5a5;
+    }
+
+    .update-item .link-github {
+      color: #24292f;
+      background: #f6f8fa;
+      border-color: #d0d7de;
+    }
+
+    .update-item .link-github:hover {
+      background: #eaeef2;
+      border-color: #afb8c1;
+    }
+
+    .update-item .link-hf {
+      color: #3c3c3c;
+      background: #fff9db;
+      border-color: #ffd21e;
+    }
+
+    .update-item .link-hf:hover {
+      background: #fff3bf;
+      border-color: #ffc107;
+    }
+
+    .update-item .link-youtube {
+      color: #ff0000;
+      background: #fff5f5;
+      border-color: #ffcccc;
+    }
+
+    .update-item .link-youtube:hover {
+      background: #ffe5e5;
+      border-color: #ffb3b3;
+    }
+
+    .update-item .link-arxiv svg,
+    .update-item .link-github svg,
+    .update-item .link-youtube svg {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+    }
+
+    .update-item .link-hf .hf-emoji {
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    /* Paper entry component */
+    .paper-entry {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 2px 6px;
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      margin: 0 4px;
+      line-height: 1.4;
+    }
+
+    .paper-entry .paper-title {
+      font-weight: 500;
+      color: var(--text);
+      font-size: 0.95rem;
+    }
+
+    .paper-entry .paper-links {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      margin-left: 2px;
+    }
+
+    .paper-entry .link-arxiv,
+    .paper-entry .link-github,
+    .paper-entry .link-hf,
+    .paper-entry .link-youtube {
+      margin: 0;
+    }
+
+    /* Publications */
+    .pub {
+      margin-bottom: 10px;
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .pub-thumb-wrapper {
+      width: 150px;
+      max-width: 30%;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .pub-thumb {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      object-position: center;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      display: block;
+    }
+
+    .pub-thumb-wrapper:hover .pub-thumb {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .pub-thumb-wrapper:hover::after {
+      content: '';
+      position: fixed;
+      top: 50%;
+      left: 30%;
+      transform: translate(-50%, -50%);
+      width: 450px;
+      aspect-ratio: var(--img-ratio, 1);
+      max-height: 500px;
+      background: white var(--thumb-img) no-repeat center / contain;
+      z-index: 10000;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      border-radius: 8px;
+      padding: 12px;
+      pointer-events: none;
+    }
+
+    .pub-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: var(--text);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border: 1px solid var(--text);
+      line-height: 1.2;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .pub-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .pub-title {
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .pub-title .pub-badge {
+      line-height: 1.1;
+      margin-left: 4px;
+    }
+
+    .pub-body {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      flex-wrap: wrap;
+      position: relative;
+    }
+
+    .pub-info {
+      flex: 1;
+      min-width: 220px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .pub-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-size: 0.88rem;
+      color: #6b7280;
+      font-weight: 500;
+      letter-spacing: 0.1px;
+    }
+
+    .pub-authors {
+      color: #4b5563;
+    }
+
+    .pub-authors .author-me {
+      font-weight: 750;
+      color: var(--text);
+    }
+
+    .pub-authors sup {
+      font-weight: 400;
+      font-size: 0.75em;
+      margin-left: 2px;
+    }
+
+    .pub-note {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .pub-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 720px) {
+      .pub-body {
+        flex-direction: column;
+      }
+
+      .pub-thumb-wrapper {
+        width: 100%;
+        max-width: 100%;
+      }
+    }
+
+    .pub-authors {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .pub-venue {
+      font-size: 0.9rem;
+      font-style: italic;
+      color: var(--muted);
+    }
+
+    .pub-links {
+      font-size: 0.9rem;
+      margin-top: 2px;
+    }
+
+    .pub-links a {
+      margin-right: 8px;
+    }
+
+    .pub-links .link-github {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 2px 8px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      background: #f8f9fb;
+      text-decoration: none;
+      line-height: 1.2;
+    }
+
+    .pub-links .link-github svg {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+    }
+
+    .pub-links .link-hf {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 2px 8px;
+      border: 1px solid #f5c400;
+      border-radius: 6px;
+      color: #111;
+      background: #fff8e1;
+      text-decoration: none;
+      line-height: 1.2;
+    }
+
+    .pub-links .link-hf .hf-emoji {
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    .pub-links .link-youtube {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 2px 8px;
+      border: 1px solid #ffcccc;
+      border-radius: 6px;
+      color: #ff0000;
+      background: #fff5f5;
+      text-decoration: none;
+      line-height: 1.2;
+    }
+
+    .pub-links .link-youtube:hover {
+      background: #ffe5e5;
+      border-color: #ffb3b3;
+    }
+
+    .pub-links .link-youtube svg {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+    }
+
+    /* Experience & service */
+    .item {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .item-logo {
+      width: 90px;
+      height: 90px;
+      flex-shrink: 0;
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f8f9fb;
+    }
+
+    .item-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 8px;
+    }
+
+    .item-content {
+      flex: 1;
+    }
+
+    .item-role {
+      font-weight: 600;
+    }
+
+    .item-role a {
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .item-role a:hover {
+      color: var(--accent);
+      text-decoration: underline;
+    }
+
+    .item-meta {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .item-advisor {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .item-advisor a {
+      color: var(--muted);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .item-advisor a:hover {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    .item-desc {
+      font-size: 0.95rem;
+      margin-top: 4px;
+    }
+
+    /* Footer */
+    footer {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 24px 16px 32px;
+      font-size: 0.8rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav">
+      <div class="nav-left">
+        Yiwen Shao
+      </div>
+      <nav class="nav-right">
+        <a href="#about">About</a>
+        <a href="#updates">Updates</a>
+        <a href="#publications">Publications</a>
+        <a href="#experience">Experience</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- ABOUT -->
+    <section id="about">
+      <div>
+        <h1>Yiwen Shao</h1>
+        <div class="social-links">
+          <a href="mailto:yshao18@jhu.edu" title="Email">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+            </svg>
+          </a>
+          <a href="https://scholar.google.com/citations?user=CX2Eo2MAAAAJ&hl=en&oi=ao" title="Google Scholar">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <path d="M12 24a7 7 0 1 1 0-14 7 7 0 0 1 0 14zm0-24L0 9.5l4.5 3.75L12 0l7.5 13.25L24 9.5z"/>
+            </svg>
+          </a>
+          <a href="https://github.com/YiwenShaoStephen" title="GitHub">
+            <svg viewBox="0 0 16 16" width="20" height="20" fill="currentColor">
+              <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
+            </svg>
+          </a>
+          <a href="https://www.linkedin.com/in/yiwen-shao-a4642710a/" title="LinkedIn">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+            </svg>
+          </a>
+        </div>
+        <p class="subtitle">
+          Senior Research Scientist · Tencent AI Lab, Bellevue, WA
+        </p>
+        <p>
+          I lead the Speech & Audio Understanding research at <a href="https://ailab.tencent.com/ailab/en/index/" target="_blank" rel="noreferrer noopener">Tencent AI Lab</a>, advised by <a href="https://scholar.google.com/citations?user=tMY31_gAAAAJ" target="_blank" rel="noreferrer noopener">Dr. Dong Yu</a>. I focus on audio foundation models, including audio representation learning (audio encoders/tokenizers) and Large Audio-Language Models (LALMs).
+        </p>
+        <p>
+          Previously, I was a Ph.D student from the <a href="https://www.clsp.jhu.edu/" target="_blank" rel="noreferrer noopener">Center for Language and Speech Processing (CLSP)</a> at Johns Hopkins University, advised by <a href="https://danielpovey.com/" target="_blank" rel="noreferrer noopener">Dr. Daniel Povey</a> and <a href="https://www.clsp.jhu.edu/people/sanjeev-khudanpur/" target="_blank" rel="noreferrer noopener">Dr. Sanjeev Khudanpur</a>, where I worked primarily on Automatic Speech Recognition (ASR) and related topics.
+          I got my Bachelor's degree from the School of Electronic Science & Engineering at <a href="https://www.seu.edu.cn/english/" target="_blank" rel="noreferrer noopener">Southeast University</a> in 2017.
+        </p>
+        <p>
+          I am passionate about open-source software and believe in making research accessible to the broader community. Here are some of the research toolkits and systems I have developed or contributed to:
+        </p>
+        <ul style="margin-left: 20px; line-height: 1.8;">
+          <li>
+            <a href="https://github.com/AudenAI/Auden" target="_blank" rel="noreferrer noopener"><b>Auden</b></a>
+            <span style="color: #888; font-size: 0.9em; margin-left: 4px;">(2025–present)</span>
+            <img src="https://img.shields.io/github/stars/AudenAI/Auden?style=social" alt="GitHub stars" style="margin-left: 6px; vertical-align: middle;">
+            – Comprehensive toolkit for audio foundation models. <i>(Lead Developer)</i>
+          </li>
+          <li>
+            <a href="https://github.com/Trusted-AI/adversarial-robustness-toolbox" target="_blank" rel="noreferrer noopener"><b>IBM Adversarial Robustness Toolbox</b></a>
+            <span style="color: #888; font-size: 0.9em; margin-left: 4px;">(2021)</span>
+            <img src="https://img.shields.io/github/stars/Trusted-AI/adversarial-robustness-toolbox?style=social" alt="GitHub stars" style="margin-left: 6px; vertical-align: middle;">
+            – Library for adversarial machine learning. <i>(Contributor</i> of ASR modules.)
+          </li>
+          <li>
+            <a href="https://github.com/YiwenShaoStephen/pychain" target="_blank" rel="noreferrer noopener"><b>PyChain</b></a>
+            <span style="color: #888; font-size: 0.9em; margin-left: 4px;">(2020)</span>
+            <img src="https://img.shields.io/github/stars/YiwenShaoStephen/pychain?style=social" alt="GitHub stars" style="margin-left: 6px; vertical-align: middle;">
+            – PyTorch implementation of lattice-free MMI for end-to-end ASR with fully parallelized cuda kernels. <i>(Lead Developer)</i>
+          </li>
+          <li>
+            <a href="https://github.com/freewym/espresso" target="_blank" rel="noreferrer noopener"><b>Espresso</b></a>
+            <span style="color: #888; font-size: 0.9em; margin-left: 4px;">(2019)</span>
+            <img src="https://img.shields.io/github/stars/freewym/espresso?style=social" alt="GitHub stars" style="margin-left: 6px; vertical-align: middle;">
+            – End-to-end neural speech recognition toolkit built on Fairseq. <i>(Contributor)</i>
+          </li>
+          <li>
+            <a href="https://github.com/kaldi-asr/kaldi" target="_blank" rel="noreferrer noopener"><b>Kaldi</b></a>
+            <span style="color: #888; font-size: 0.9em; margin-left: 4px;">(2017)</span>
+            <img src="https://img.shields.io/github/stars/kaldi-asr/kaldi?style=social" alt="GitHub stars" style="margin-left: 6px; vertical-align: middle;">
+            – Speech recognition toolkit with extensive training recipes. <i>(Contributor)</i>
+          </li>
+        </ul>
+        <p>
+        <ul class="chip-list">
+          <li class="chip">Speech & Audio</li>
+          <li class="chip">Large Audio-Language Models</li>
+          <li class="chip">Representation Learning</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- UPDATES -->
+    <section id="updates">
+      <h2>Updates</h2>
+      <ul class="updates-list">
+        <li class="update-item">
+          <span class="update-date">2026-01</span>
+          <span>3 papers accepted by <a class="venue" href="https://2026.ieeeicassp.org/" target="_blank" rel="noreferrer noopener">ICASSP 2026</a>
+            <span class="paper-entry">
+              <a class="link-arxiv" href="https://arxiv.org/pdf/2511.14410" title="Paper">
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                  <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/>
+                </svg>
+              </a>
+              <a class="link-github" href="https://github.com/AudenAI/Auden/tree/main/examples/tta" title="GitHub">
+                <svg aria-hidden="true" viewBox="0 0 16 16">
+                  <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
+                </svg>
+              </a>
+              <a class="link-hf" href="https://huggingface.co/AudenAI/auden-encoder-tta-m10" title="Hugging Face">
+                <span class="hf-emoji" aria-hidden="true">🤗</span>
+              </a>
+            </span>
+            <span class="paper-entry">
+              <a class="link-arxiv" href="https://arxiv.org/pdf/2511.15145" title="Paper">
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                  <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/>
+                </svg>
+              </a>
+              <a class="link-github" href="https://github.com/AudenAI/Auden/tree/main/examples/voice" title="GitHub">
+                <svg aria-hidden="true" viewBox="0 0 16 16">
+                  <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
+                </svg>
+              </a>
+              <a class="link-hf" href="https://huggingface.co/AudenAI/auden-encoder-voice" title="Hugging Face">
+                <span class="hf-emoji" aria-hidden="true">🤗</span>
+              </a>
+            </span>
+          </span>
+        </li>
+        <li class="update-item">
+          <span class="update-date">2026-01</span>
+          <span>Released 1 technical report (first authored) on Speech-LLM
+            <span class="paper-entry">
+              <a class="link-arxiv" href="https://arxiv.org/pdf/2601.06086" title="Paper">
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                  <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/>
+                </svg>
+              </a>
+              <a class="link-github" href="https://github.com/AudenAI/Auden/tree/main/examples/azeros" title="GitHub">
+                <svg aria-hidden="true" viewBox="0 0 16 16">
+                  <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
+                </svg>
+              </a>
+              <a class="link-hf" href="https://huggingface.co/AudenAI/azeros" title="Hugging Face">
+                <span class="hf-emoji" aria-hidden="true">🤗</span>
+              </a>
+            </span>
+          </span>
+        </li>
+        <li class="update-item">
+          <span class="update-date">2025-12</span>
+          <span>Open-sourced <a class="venue" href="https://github.com/AudenAI/Auden" target="_blank" rel="noreferrer noopener">Auden</a>, a toolkit for building audio foundation models
+            <span class="paper-entry">
+              <a class="link-github" href="https://github.com/AudenAI/Auden" title="GitHub">
+                <svg aria-hidden="true" viewBox="0 0 16 16">
+                  <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
+                </svg>
+              </a>
+              <a class="link-hf" href="https://huggingface.co/AudenAI" title="Hugging Face">
+                <span class="hf-emoji" aria-hidden="true">🤗</span>
+              </a>
+            </span>
+          </span>
+        </li>
+        <li class="update-item">
+          <span class="update-date">2025-12</span>
+          <span>Will present 1 paper at <a class="venue" href="https://2025.ieeeasru.org/" target="_blank" rel="noreferrer noopener">ASRU 2025</a>. See you in Hawaii!
+            <span class="paper-entry">
+              <a class="link-arxiv" href="https://arxiv.org/pdf/2508.04096" title="Paper">
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                  <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/>
+                </svg>
+              </a>
+              <a class="link-github" href="https://github.com/AudenAI/Auden/tree/main/examples/asr_llm" title="GitHub">
+                <svg aria-hidden="true" viewBox="0 0 16 16">
+                  <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
+                </svg>
+              </a>
+            </span>
+          </span>
+        </li>
+        <li class="update-item">
+          <span class="update-date">2025-11</span>
+          <span>1 paper accepted by <a class="venue" href="https://aaai.org/conference/aaai/aaai-26/" target="_blank" rel="noreferrer noopener">AAAI 2026</a>
+            <span class="paper-entry">
+              <a class="link-arxiv" href="https://arxiv.org/pdf/2508.08961" title="Paper">
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                  <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/>
+                </svg>
+              </a>
+            </span>
+          </span>
+        </li>
+        <li class="update-item">
+            <span class="update-date">2025-05</span>
+            <span>2 papers accepted by <a class="venue" href="https://www.interspeech2025.org/home" target="_blank" rel="noreferrer noopener">Interspeech 2025</a>
+              <span class="paper-entry">
+                <a class="link-arxiv" href="https://arxiv.org/pdf/2506.21555" title="Paper">
+                  <svg aria-hidden="true" viewBox="0 0 24 24">
+                    <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/>
+                  </svg>
+                </a>
+              </span>
+              <span class="paper-entry">
+                <a class="link-arxiv" href="https://arxiv.org/pdf/2505.21527" title="Paper">
+                  <svg aria-hidden="true" viewBox="0 0 24 24">
+                    <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/>
+                  </svg>
+                </a>
+                <a class="link-github" href="https://github.com/zzasdf/VietASR" title="GitHub">
+                  <svg aria-hidden="true" viewBox="0 0 16 16">
+                    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
+                  </svg>
+                </a>
+              </span>
+            </span>
+          </li>
+        <li class="update-item">
+          <span class="update-date">2024-09</span>
+          <span>Joined <a class="venue" href="https://ailab.tencent.com/ailab/en/index/" target="_blank" rel="noreferrer noopener">Tencent AI Lab (Bellevue)</a> as a Senior Research Scientist.</span>
+        </li>
+        <li class="update-item">
+          <span class="update-date">2024-09</span>
+          <span>2 papers (1 first authored) accepted by <a class="venue" href="https://2024.ieeeslt.org/" target="_blank" rel="noreferrer noopener">SLT 2024</a>
+            <span class="paper-entry">
+              <a class="link-arxiv" href="https://arxiv.org/pdf/2408.17431" title="Paper">
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                  <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/>
+                </svg>
+              </a>
+            </span>
+            <span class="paper-entry">
+              <a class="link-arxiv" href="https://ieeexplore.ieee.org/abstract/document/10832166" title="Paper">
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                  <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/>
+                </svg>
+              </a>
+            </span>
+          </span>
+        </li>
+        <li class="update-item">
+          <span class="update-date">2024-06</span>
+          <span>2 papers (both first authored) accepted by <a class="venue" href="https://interspeech2024.org/" target="_blank" rel="noreferrer noopener">Interspeech 2024</a>
+            <span class="paper-entry">
+              <a class="link-arxiv" href="https://arxiv.org/pdf/2406.09589" title="Paper">
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                  <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/>
+                </svg>
+              </a>
+            </span>
+            <span class="paper-entry">
+              <a class="link-arxiv" href="https://arxiv.org/pdf/2311.00146" title="Paper">
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                  <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/>
+                </svg>
+              </a>
+              <a class="link-youtube" href="https://www.youtube.com/watch?v=Q6eWOg42UBg" title="YouTube">
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                  <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+                </svg>
+              </a>
+            </span>
+          </span>
+        </li>
+        <li class="update-item">
+          <span class="update-date">2023-12</span>
+          <span>1 paper accepted by <a class="venue" href="https://2024.ieeeicassp.org/" target="_blank" rel="noreferrer noopener">ICASSP 2024</a>
+            <span class="paper-entry">
+              <a class="link-arxiv" href="https://arxiv.org/pdf/2310.16367" title="Paper">
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                  <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/>
+                </svg>
+              </a>
+            </span>
+          </span>
+        </li>
+        <li class="update-item">
+          <span class="update-date">2023-12</span>
+          <span>Gave a talk at <a class="venue" href="https://www.clsp.jhu.edu/events/categories/seminar/" target="_blank" rel="noreferrer noopener">JHU CLSP Seminar</a>: 
+            <span class="paper-entry">
+              <span class="paper-links">
+                <a class="link-arxiv" href="https://arxiv.org/pdf/2311.00146" title="Paper">
+                  <svg aria-hidden="true" viewBox="0 0 24 24">
+                    <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/>
+                  </svg>
+                </a>
+                <a class="link-youtube" href="https://www.youtube.com/watch?v=Q6eWOg42UBg" title="YouTube">
+                  <svg aria-hidden="true" viewBox="0 0 24 24">
+                    <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+                  </svg>
+                </a>
+              </span>
+            </span>
+          </span>
+        </li>
+        <li class="update-item">
+          <span class="update-date">2022-07</span>
+          <span>2 papers (1 first authored) accepted by <a class="venue" href="https://www.interspeech2022.org/" target="_blank" rel="noreferrer noopener">Interspeech 2022</a>
+            <span class="paper-entry">
+              <a class="link-arxiv" href="https://par.nsf.gov/servlets/purl/10465897" title="Paper">
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                  <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/>
+                </svg>
+              </a>
+            </span>
+            <span class="paper-entry">
+              <a class="link-arxiv" href="https://arxiv.org/pdf/2204.03851" title="Paper">
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                  <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/>
+                </svg>
+              </a>
+            </span>
+          </span>
+        </li>
+        <li class="update-item">
+          <span class="update-date">2022-01</span>
+          <span>1 paper (first authored) accepted by <a class="venue" href="https://2022.ieeeicassp.org/" target="_blank" rel="noreferrer noopener">ICASSP 2022</a>
+            <span class="paper-entry">
+              <a class="link-arxiv" href="https://arxiv.org/pdf/2111.11023" title="Paper">
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                  <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/>
+                </svg>
+              </a>
+            </span>
+          </span>
+        </li>
+        <!-- Add more updates as needed -->
+      </ul>
+    </section>
+
+    <!-- RECENT WORKS -->
+    <section id="recent-works">
+      <h2>Recent Works</h2>
+      <p style="font-size: 0.9rem; color: var(--muted); margin-top: 8px; margin-bottom: 16px;">
+        <sup>*</sup> equal contribution, <sup>†</sup> corresponding author or industry lead
+      </p>
+
+      <div class="project-accordion">
+        <details class="project-block">
+          <summary>SPEECH & MULTIMODAL LLMS</summary>
+          <div class="project-content">
+            <div class="pub">
+              <div class="pub-body">
+                <div class="pub-thumb-wrapper" style="--thumb-img: url('images/azeros.png'); --img-ratio: 1.5;">
+                  <img class="pub-thumb" src="images/azeros.png" alt="AZEROS project preview">
+                </div>
+                <div class="pub-info">
+                  <div class="pub-title">AZEROS: Extending LLM to Speech with Self-Generated Instruction-Free Tuning</div>
+                  <div class="pub-meta">
+                    <div class="pub-authors"><span class="author-me">Yiwen Shao<sup>*†</sup></span>, Wei Liu<sup>*</sup>, Jiahong Li<sup>*</sup>, Tianzi Wang, Kun Wei, Meng Yu, Dong Yu</div>
+                  </div>
+                  <div class="project-desc">
+                    Self-generated instruction-free tuning eliminates task-specific data, achieving SOTA on VoiceBench and AIR-Bench with minimal training.
+                  </div>
+                  <div class="pub-links">
+                    <a class="pub-badge" href="https://arxiv.org/pdf/2601.06086">technical report 2026</a>
+                    <a class="link-github" href="https://github.com/AudenAI/Auden/tree/main/examples/azeros">
+                        <svg aria-hidden="true" viewBox="0 0 16 16">
+                          <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
+                        </svg>
+                        <span>Auden</span>
+                      </a>
+                      <a class="link-hf" href="https://huggingface.co/AudenAI/azeros">
+                        <span class="hf-emoji" aria-hidden="true">🤗</span>
+                        <span>Auden</span>
+                      </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="pub">
+              <div class="pub-body">
+                <div class="pub-thumb-wrapper" style="--thumb-img: url('images/tagspeech.png'); --img-ratio: 1.5;">
+                  <img class="pub-thumb" src="images/tagspeech.png" alt="TagSpeech project preview">
+                </div>
+                <div class="pub-info">
+                  <div class="pub-title">TagSpeech: End-to-End Multi-Speaker ASR and Diarization with Fine-Grained Temporal Grounding</div>
+                  <div class="pub-meta">
+                    <div class="pub-authors">Mingyue Huo, <span class="author-me">Yiwen Shao</span>, Yuheng Zhang</div>
+                  </div>
+                  <div class="project-desc">
+                    LLM-based framework with temporal anchor grounding for joint multi-speaker ASR and diarization.
+                  </div>
+                  <div class="pub-links">
+                    <a class="pub-badge" href="https://www.arxiv.org/pdf/2601.06896">preprint 2026</a>
+                    <a class="link-github" href="https://github.com/AudenAI/Auden/tree/main/examples/tagspeech">
+                        <svg aria-hidden="true" viewBox="0 0 16 16">
+                            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
+                          </svg>
+                          <span>Auden</span>
+                    </a>
+                    <a class="link-hf" href="https://huggingface.co/AudenAI/TagSpeech-AMI">
+                      <span class="hf-emoji" aria-hidden="true">🤗</span>
+                      <span>Auden</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="pub">
+              <div class="pub-body">
+                <div class="pub-thumb-wrapper" style="--thumb-img: url('images/llm_asr.png'); --img-ratio: 1.5;">
+                  <img class="pub-thumb" src="images/llm_asr.png" alt="EFIN project preview">
+                </div>
+                <div class="pub-info">
+                  <div class="pub-title">Efficient Scaling for LLM-based ASR</div>
+                  <div class="pub-meta">
+                    <div class="pub-authors">Bingshen Mu, <span class="author-me">Yiwen Shao<sup>†</sup></span>, Kun Wei, Dong Yu, Lei Xie</div>
+                  </div>
+                  <div class="project-desc">
+                    EFIN (Encoder First Integration) training paradigm achieves more efficient and effective LLM-ASR.
+                  </div>
+                  <div class="pub-links">
+                    <a class="pub-badge" href="https://arxiv.org/pdf/2508.04096">ASRU 2025</a>
+                    <a class="link-github" href="https://github.com/AudenAI/Auden/tree/main/examples/asr_llm">
+                        <svg aria-hidden="true" viewBox="0 0 16 16">
+                            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
+                          </svg>
+                          <span>Auden</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="pub">
+              <div class="pub-body">
+                <div class="pub-thumb-wrapper" style="--thumb-img: url('images/multi_llm.png'); --img-ratio: 1.5;">
+                  <img class="pub-thumb" src="images/multi_llm.png" alt="Multi-talker ASR project preview">
+                </div>
+                <div class="pub-info">
+                  <div class="pub-title">Advancing multi-talker ASR performance with large language models</div>
+                  <div class="pub-meta">
+                    <div class="pub-authors">Mohan Shi, Zengrui Jin, Yaoxun Xu, Yong Xu, Shi-Xiong Zhang, Kun Wei, <span class="author-me">Yiwen Shao</span>, Chunlei Zhang, Dong Yu</div>
+                  </div>
+                  <div class="project-desc">
+                    Leveraging large language models to advance multi-talker ASR performance.
+                  </div>
+                  <div class="pub-links">
+                    <a class="pub-badge" href="https://arxiv.org/pdf/2408.17431">SLT 2024</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details class="project-block">
+          <summary>AUDIO ENCODERS/TOKENIZERS</summary>
+          <div class="project-content">
+            <div class="pub">
+              <div class="pub-body">
+                <div class="pub-thumb-wrapper" style="--thumb-img: url('images/tag.png'); --img-ratio: 1.5;">
+                  <img class="pub-thumb" src="images/tag.png" alt="General-purpose audio pretraining project preview">
+                </div>
+                <div class="pub-info">
+                  <div class="pub-title">Unlocking Strong Supervision: A Data-Centric Study of General-Purpose Audio Pre-Training Methods</div>
+                  <div class="pub-meta">
+                    <div class="pub-authors">Xuanru Zhou, <span class="author-me">Yiwen Shao<sup>†</sup></span>, Wei-Cheng Tseng, Dong Yu</div>
+                  </div>
+                  <div class="project-desc">
+                    Data-centric strong-supervision audio pretraining with high-fidelity captions and unified tags across speech, music, environmental sounds.
+                  </div>
+                  <div class="pub-links">
+                    <a class="pub-badge" href="https://arxiv.org/pdf/2511.16757">preprint 2025</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="pub">
+              <div class="pub-body">
+                <div class="pub-thumb-wrapper" style="--thumb-img: url('images/tta.png'); --img-ratio: 1.5;">
+                  <img class="pub-thumb" src="images/tta.png" alt="TTA project preview">
+                </div>
+                <div class="pub-info">
+                  <div class="pub-title">TTA: Transcribe, Translate and Alignment for Cross-lingual Speech Representation</div>
+                  <div class="pub-meta">
+                    <div class="pub-authors">Wei Liu<sup>*</sup>, Jiahong Li<sup>*</sup>, <span class="author-me">Yiwen Shao<sup>†</sup></span>, Dong Yu</div>
+                  </div>
+                  <div class="project-desc">
+                    Jointly trains ASR, translation, and contrastive objectives on a shared encoder, yielding strong cross-lingual semantic representations.
+                  </div>
+                  <div class="pub-links">
+                    <a class="pub-badge" href="https://arxiv.org/pdf/2511.14410">ICASSP 2026</a>
+                    <a class="link-github" href="https://github.com/AudenAI/Auden/tree/main/examples/tta">
+                      <svg aria-hidden="true" viewBox="0 0 16 16">
+                        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
+                      </svg>
+                      <span>Auden</span>
+                    </a>
+                    <a class="link-hf" href="https://huggingface.co/AudenAI/auden-encoder-tta-m10">
+                      <span class="hf-emoji" aria-hidden="true">🤗</span>
+                      <span>Auden</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="pub">
+              <div class="pub-body">
+                <div class="pub-thumb-wrapper" style="--thumb-img: url('images/voice.png'); --img-ratio: 1.5;">
+                  <img class="pub-thumb" src="images/voice.png" alt="Auden voice project preview">
+                </div>
+                <div class="pub-info">
+                  <div class="pub-title">Auden-Voice: General-Purpose Voice Encoder for Speech and Language Understanding</div>
+                  <div class="pub-meta">
+                    <div class="pub-authors">Mingyue Huo, Wei-Cheng Tseng, <span class="author-me">Yiwen Shao<sup>†</sup></span>, Hao Zhang, Dong Yu</div>
+                  </div>
+                  <div class="project-desc">
+                    Multi-task training yields balanced identity and paralinguistic voice encoder; Auden-Voice integrates strongly with LLMs.
+                  </div>
+                  <div class="pub-links">
+                    <a class="pub-badge" href="https://arxiv.org/pdf/2511.15145">ICASSP 2026</a>
+                    <a class="link-github" href="https://github.com/AudenAI/Auden/tree/main/examples/voice">
+                      <svg aria-hidden="true" viewBox="0 0 16 16">
+                        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
+                      </svg>
+                      <span>Auden</span>
+                    </a>
+                    <a class="link-hf" href="https://huggingface.co/AudenAI/auden-encoder-voice">
+                      <span class="hf-emoji" aria-hidden="true">🤗</span>
+                      <span>Auden</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="pub">
+              <div class="pub-body">
+                <div class="pub-thumb-wrapper" style="--thumb-img: url('images/caption.png'); --img-ratio: 1.5;">
+                  <img class="pub-thumb" src="images/caption.png" alt="ArXiv 2511.16757 project preview">
+                </div>
+                <div class="pub-info">
+                  <div class="pub-title">Revisiting Audio-language Pretraining for Learning General-purpose Audio Representation</div>
+                  <div class="pub-meta">
+                    <div class="pub-authors">Wei-Cheng Tseng, Xuanru Zhou, Mingyue Huo, <span class="author-me">Yiwen Shao<sup>†</sup></span>, Hao Zhang, Dong Yu</div>
+                  </div>
+                  <div class="project-desc">
+                    10.7M CaptionStew enables the first contrastive vs. captioning study for general-purpose audio-language representations.
+                  </div>
+                  <div class="pub-links">
+                    <a class="pub-badge" href="https://arxiv.org/pdf/2511.16757">preprint 2025</a>
+                    <a class="link-github" href="https://github.com/AudenAI/Auden/tree/main/examples/caption">
+                        <svg aria-hidden="true" viewBox="0 0 16 16">
+                            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
+                          </svg>
+                          <span>Auden</span>
+                    </a>
+                    <a class="link-hf" href="https://huggingface.co/datasets/RayTseng0406/CaptionStew">
+                      <span class="hf-emoji" aria-hidden="true">🤗</span>
+                      <span>CaptionStew</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="pub">
+              <div class="pub-body">
+                <div class="pub-thumb-wrapper" style="--thumb-img: url('images/dual.png'); --img-ratio: 1.5;">
+                  <img class="pub-thumb" src="images/dual.png" alt="DualSpeechLM project preview">
+                </div>
+                <div class="pub-info">
+                  <div class="pub-title">DualSpeechLM: Towards Unified Speech Understanding and Generation via Dual Speech Token Modeling with Large Language Models</div>
+                  <div class="pub-meta">
+                    <div class="pub-authors">Yuanyuan Wang, Dongchao Yang, <span class="author-me">Yiwen Shao<sup>†</sup></span>, Hangting Chen, Jiankun Zhao, Zhiyong Wu, Helen Meng, Xixin Wu</div>
+                  </div>
+                  <div class="project-desc">
+                    Dual-token speech modeling with LLMs for unified speech understanding and generation across tasks.
+                  </div>
+                  <div class="pub-links">
+                    <a class="pub-badge" href="https://arxiv.org/pdf/2508.08961">AAAI 2026</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details class="project-block">
+          <summary>ASR</summary>
+          <div class="project-content">
+            <div class="pub">
+              <div class="pub-body">
+                <div class="pub-thumb-wrapper" style="--thumb-img: url('images/asr_lora.png'); --img-ratio: 1.5;">
+                  <img class="pub-thumb" src="images/asr_lora.png" alt="LoRA Language Experts project preview">
+                </div>
+                <div class="pub-info">
+                  <div class="pub-title">Efficient Multilingual ASR Finetuning via LoRA Language Experts</div>
+                  <div class="pub-meta">
+                    <div class="pub-authors">Jiahong Li, <span class="author-me">Yiwen Shao<sup>†</sup></span>, Jianheng Zhuo, Chenda Li, Liliang Tang, Dong Yu, Yanmin Qian</div>
+                  </div>
+                  <div class="project-desc">
+                    LoRA language experts via fusion/distillation improve multilingual ASR by 10-15% relative gain over standard fine-tuning.
+                  </div>
+                  <div class="pub-links">
+                    <a class="pub-badge" href="https://arxiv.org/pdf/2506.21555">interspeech 2025</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="pub">
+              <div class="pub-body">
+                <div class="pub-thumb-wrapper" style="--thumb-img: url('images/vietasr.png'); --img-ratio: 1.5;">
+                  <img class="pub-thumb" src="images/vietasr.png" alt="VietASR project preview">
+                </div>
+                <div class="pub-info">
+                  <div class="pub-title">VietASR: Achieving Industry-level Vietnamese ASR with 50-hour labeled data and Large-Scale Speech Pretraining</div>
+                  <div class="pub-meta">
+                    <div class="pub-authors">Jianheng Zhuo, Yifan Yang, <span class="author-me">Yiwen Shao<sup>†</sup></span>, Yong Xu, Dong Yu, Kai Yu, Xie Chen</div>
+                  </div>
+                  <div class="project-desc">
+                    Cost-effective ASR training pipeline for low-resource languages using multi-iteration ASR-biased self-supervised learning.
+                  </div>
+                  <div class="pub-links">
+                    <a class="pub-badge" href="https://arxiv.org/pdf/2505.21527">interspeech 2025</a>
+                    <a class="link-github" href="https://github.com/zzasdf/VietASR">
+                        <svg aria-hidden="true" viewBox="0 0 16 16">
+                            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
+                          </svg>
+                          <span>VietASR</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- SELECTED PUBLICATIONS -->
+    <section id="publications">
+      <h2>Selected Publications</h2>
+      <p style="font-size: 0.9rem; color: var(--muted); margin-top: 8px; margin-bottom: 16px;">
+        <sup>*</sup> equal contribution
+      </p>
+
+      <div class="project-accordion">
+        <details class="project-block">
+          <summary>ASR</summary>
+          <div class="project-content">
+            <div class="pub">
+              <div class="pub-body">
+                <div class="pub-thumb-wrapper" style="--thumb-img: url('images/spatial.png'); --img-ratio: 1.5;">
+                  <img class="pub-thumb" src="images/spatial.png" alt="Spatialemb project preview">
+                </div>
+                <div class="pub-info">
+                  <div class="pub-title">Spatialemb: Extract and Encode Spatial Information for 1-Stage Multi-Channel Multi-Speaker ASR on Arbitrary Microphone Arrays</div>
+                  <div class="pub-meta">
+                    <div class="pub-authors"><span class="author-me">Yiwen Shao</span>, Yong Xu, Sanjeev Khudanpur, Dong Yu</div>
+                  </div>
+                  <div class="project-desc">
+                    Novel spatial embedding approach for single-stage multi-channel multi-speaker ASR that works with arbitrary microphone array configurations.
+                  </div>
+                  <div class="pub-links">
+                    <a class="pub-badge" href="https://ieeexplore.ieee.org/abstract/document/10832166">SLT 2024</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="pub">
+              <div class="pub-body">
+                <div class="pub-thumb-wrapper" style="--thumb-img: url('images/solo.png'); --img-ratio: 1.5;">
+                  <img class="pub-thumb" src="images/solo.png" alt="Solo Segment project preview">
+                </div>
+                <div class="pub-info">
+                  <div class="pub-title">Multi-Channel Multi-Speaker ASR Using Target Speaker's Solo Segment</div>
+                  <div class="pub-meta">
+                    <div class="pub-authors"><span class="author-me">Yiwen Shao</span>, Shi-Xiong Zhang, Yong Xu, Meng Yu, Dong Yu, Daniel Povey, Sanjeev Khudanpur</div>
+                  </div>
+                  <div class="project-desc">
+                    Leverages target speaker's solo segments for improved multi-channel multi-speaker ASR through speaker-conditioned modeling.
+                  </div>
+                  <div class="pub-links">
+                    <a class="pub-badge" href="https://arxiv.org/pdf/2406.09589">Interspeech 2024</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="pub">
+              <div class="pub-body">
+                <div class="pub-thumb-wrapper" style="--thumb-img: url('images/rir.png'); --img-ratio: 1.5;">
+                  <img class="pub-thumb" src="images/rir.png" alt="RIR-SF project preview">
+                </div>
+                <div class="pub-info">
+                  <div class="pub-title">RIR-SF: Room Impulse Response Based Spatial Feature for Target Speech Recognition in Multi-Channel Multi-Speaker Scenarios</div>
+                  <div class="pub-meta">
+                    <div class="pub-authors"><span class="author-me">Yiwen Shao</span>, Shi-Xiong Zhang, Dong Yu</div>
+                  </div>
+                  <div class="project-desc">
+                    Novel spatial feature based on room impulse response for multi-channel multi-speaker ASR, achieving improved target speaker recognition.
+                  </div>
+                  <div class="pub-links">
+                    <a class="pub-badge" href="https://arxiv.org/pdf/2311.00146">Interspeech 2024</a>
+                    <a class="link-youtube" href="https://www.youtube.com/watch?v=Q6eWOg42UBg" title="YouTube">
+                      <svg aria-hidden="true" viewBox="0 0 24 24">
+                        <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+                      </svg>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="pub">
+              <div class="pub-body">
+                <div class="pub-thumb-wrapper" style="--thumb-img: url('images/asr_3d.png'); --img-ratio: 1.5;">
+                  <img class="pub-thumb" src="images/asr_3d.png" alt="3D Spatial ASR project preview">
+                </div>
+                <div class="pub-info">
+                  <div class="pub-title">Multi-channel multi-speaker ASR using 3D spatial feature</div>
+                  <div class="pub-meta">
+                    <div class="pub-authors"><span class="author-me">Yiwen Shao<sup>*</sup></span>, Shi-Xiong Zhang<sup>*</sup>, Dong Yu</div>
+                  </div>
+                  <div class="project-desc">
+                    Using 3D spatial features from depth camera to enable end-to-end multi-speaker ASR via All-In-One model, achieving 31% CERR over 1D directional approaches.
+                  </div>
+                  <div class="pub-links">
+                    <a class="pub-badge" href="https://arxiv.org/pdf/2111.11023">ICASSP 2022</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="pub">
+              <div class="pub-body">
+                <div class="pub-thumb-wrapper" style="--thumb-img: url('images/pychain.png'); --img-ratio: 1.5;">
+                  <img class="pub-thumb" src="images/pychain.png" alt="PyChain project preview">
+                </div>
+                <div class="pub-info">
+                  <div class="pub-title">PyChain: A Fully Parallelized PyTorch Implementation of LF-MMI for End-to-End ASR</div>
+                  <div class="pub-meta">
+                    <div class="pub-authors"><span class="author-me">Yiwen Shao</span>, Yiming Wang, Daniel Povey, Sanjeev Khudanpur</div>
+                  </div>
+                  <div class="project-desc">
+                    A Pytorch native implementation of LF-MMI loss with fully parallelized cuda kernels. Intergrated into <a href="https://github.com/freewym/espresso">espresso</a> and serves as a pioneering work of <a href="https://github.com/k2-fsa/k2">next-gen kaldi</a>.
+                  </div>
+                  <div class="pub-links">
+                    <a class="pub-badge" href="#">Interspeech 2020</a>
+                    <a class="link-github" href="https://github.com/YiwenShaoStephen/pychain">
+                      <svg aria-hidden="true" viewBox="0 0 16 16">
+                        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
+                      </svg>
+                      <span>PyChain</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- EXPERIENCE -->
+    <section id="experience">
+      <h2>Experience</h2>
+
+      <div class="item">
+        <div class="item-logo">
+          <!-- Tencent logo placeholder -->
+          <img src="images/tencent_ailab.png" alt="Tencent">
+        </div>
+        <div class="item-content">
+          <div class="item-role">Senior Research Scientist, <a href="https://ailab.tencent.com/ailab/en/index/" target="_blank" rel="noreferrer noopener">Tencent AI Lab (Bellevue)</a></div>
+          <div class="item-meta">2024 - Present</div>
+          <div class="item-advisor">Supervisor: <a href="https://scholar.google.com/citations?user=tMY31_gAAAAJ" target="_blank" rel="noreferrer noopener">Dong Yu</a></div>
+          <div class="item-desc">
+            Working on speech and multimodal large language models, including ASR, speech-LLMs and large-scale audio pretraining.
+          </div>
+        </div>
+      </div>
+
+      <div class="item">
+        <div class="item-logo">
+          <!-- Tencent logo placeholder -->
+          <img src="images/tencent_ailab.png" alt="Tencent">
+        </div>
+        <div class="item-content">
+          <div class="item-role">Research Intern, <a href="https://ailab.tencent.com/ailab/en/index/" target="_blank" rel="noreferrer noopener">Tencent AI Lab (Bellevue)</a></div>
+          <div class="item-meta">2021 - 2024 (multiple terms)</div>
+          <div class="item-advisor">Supervisors: <a href="https://scholar.google.com/citations?user=4nGncN4AAAAJ&hl=en&oi=ao" target="_blank" rel="noreferrer noopener">Shi-Xiong Zhang</a>, <a href="https://scholar.google.com/citations?user=tMY31_gAAAAJ" target="_blank" rel="noreferrer noopener">Dong Yu</a></div>
+          <div class="item-desc">
+              Developed audio-visual models for multi-channel multi-speaker speech recognition.
+          </div>
+        </div>
+      </div>
+
+      <div class="item">
+        <div class="item-logo">
+          <!-- JHU logo placeholder -->
+          <img src="images/jhu.png" alt="JHU">
+        </div>
+        <div class="item-content">
+          <div class="item-role">Research Assistant, <a href="https://www.clsp.jhu.edu/" target="_blank" rel="noreferrer noopener">CLSP</a>, <a href="https://www.jhu.edu/" target="_blank" rel="noreferrer noopener">JHU</a></div>
+          <div class="item-meta">2017 - 2024</div>
+          <div class="item-advisor">Advisors: <a href="https://danielpovey.com/" target="_blank" rel="noreferrer noopener">Daniel Povey</a>, <a href="https://www.clsp.jhu.edu/people/sanjeev-khudanpur/" target="_blank" rel="noreferrer noopener">Sanjeev Khudanpur</a></div>
+          <div class="item-desc">Worked on Automatic Speech Recognition (ASR) and related topics.
+          </div>
+        </div>
+      </div>
+
+    <!-- CONTACT -->
+    <section id="contact">
+      <h2>Contact</h2>
+      <p>
+        I am happy to discuss research collaborations, internships, or anything related to
+        speech, audio, and multimodal AI.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    © <span id="year"></span> Yiwen Shao. All rights reserved.
+    <br>
+    Built with plain HTML/CSS and hosted on GitHub Pages.
+  </footer>
+
+  <script>
+    // Auto-update year in footer
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
