@@ -343,7 +343,8 @@
     .update-item .link-arxiv,
     .update-item .link-github,
     .update-item .link-hf,
-    .update-item .link-youtube {
+    .update-item .link-youtube,
+    .update-item .link-slides {
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -401,9 +402,20 @@
       border-color: #ffb3b3;
     }
 
+    .update-item .link-slides {
+      color: #1f6feb;
+      background: #eef5ff;
+    }
+
+    .update-item .link-slides:hover {
+      background: #dbeafe;
+      border-color: #93c5fd;
+    }
+
     .update-item .link-arxiv svg,
     .update-item .link-github svg,
-    .update-item .link-youtube svg {
+    .update-item .link-youtube svg,
+    .update-item .link-slides svg {
       width: 14px;
       height: 14px;
       fill: currentColor;
@@ -443,7 +455,8 @@
     .paper-entry .link-arxiv,
     .paper-entry .link-github,
     .paper-entry .link-hf,
-    .paper-entry .link-youtube {
+    .paper-entry .link-youtube,
+    .paper-entry .link-slides {
       margin: 0;
     }
 
@@ -863,6 +876,35 @@
     <section id="updates">
       <h2>Updates</h2>
       <ul class="updates-list">
+        <li class="update-item">
+          <span class="update-date">2026-03</span>
+          <span>Gave a talk at <a class="venue" href="https://poonehmousavi.github.io/rg.html" target="_blank" rel="noreferrer noopener">Conversational AI Reading Group at Mila</a> on “Auden: From Audio Encoders to LALMs”
+            <span class="paper-entry">
+              <a class="link-youtube" href="https://youtu.be/BJ3L0Kmz7Jw" title="YouTube">
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                  <path d="M19.615 3.184c-1.366-.53-6.83-.53-6.83-.53s-5.465 0-6.83.53A3.63 3.63 0 0 0 3.184 6.05C2.655 7.416 2.655 12 2.655 12s0 4.584.53 5.95a3.63 3.63 0 0 0 2.771 2.866c1.365.53 6.83.53 6.83.53s5.464 0 6.83-.53a3.63 3.63 0 0 0 2.77-2.866c.53-1.366.53-5.95.53-5.95s0-4.584-.53-5.95a3.63 3.63 0 0 0-2.77-2.866zM10.5 15.5v-7l6 3.5-6 3.5z"/>
+                </svg>
+              </a>
+              <a class="link-slides" href="https://poonehmousavi.github.io/assets/slides/Yiwen_Shao_talk.pdf" title="Slides">
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                  <path d="M4 3h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H13v3h3a1 1 0 1 1 0 2H8a1 1 0 1 1 0-2h3v-3H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zm1 2v8h14V5H5z"/>
+                </svg>
+              </a>
+            </span>
+          </span>
+        </li>
+        <li class="update-item">
+          <span class="update-date">2026-01</span>
+          <span>1 paper accepted by <a class="venue" href="https://cvpr.thecvf.com/" target="_blank" rel="noreferrer noopener">CVPR 2026</a>
+            <span class="paper-entry">
+              <a class="link-arxiv" href="https://rorizzz.github.io/images/2026_CVPR.pdf" title="Paper">
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                  <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/>
+                </svg>
+              </a>
+            </span>
+          </span>
+        </li>
         <li class="update-item">
           <span class="update-date">2026-01</span>
           <span>3 papers accepted by <a class="venue" href="https://2026.ieeeicassp.org/" target="_blank" rel="noreferrer noopener">ICASSP 2026</a>
