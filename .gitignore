@@ -1,4 +1,13 @@
+# macOS / editors
 .DS_Store
 *.swp
 *~
 .vscode/
+
+# Node / Astro
+node_modules/
+dist/
+.astro/
+.env
+.env.*
+!.env.example

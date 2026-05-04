@@ -1,0 +1,62 @@
+---
+import Base from "../layouts/Base.astro";
+import Sidebar from "../components/Sidebar.astro";
+import About from "../components/About.astro";
+import OpenSourceList from "../components/OpenSourceList.astro";
+import Updates from "../components/Updates.astro";
+import WorkSection from "../components/WorkSection.astro";
+import Talks from "../components/Talks.astro";
+import Experience from "../components/Experience.astro";
+import Footer from "../components/Footer.astro";
+import Icon from "../components/icons/Icon.astro";
+import { recentWorks } from "../data/works";
+
+---
+
+<Base>
+  <!-- Floating theme toggle (top-right) -->
+  <button
+    type="button"
+    data-theme-toggle
+    class="fixed top-4 right-4 z-30 rounded-full p-2 transition-colors plain-link"
+    style="border: 1px solid var(--rule); background: var(--bg); color: var(--fg-2);"
+    aria-label="Toggle dark mode"
+  >
+    <span class="block dark:hidden">
+      <Icon name="moon" />
+    </span>
+    <span class="hidden dark:block">
+      <Icon name="sun" />
+    </span>
+  </button>
+
+  <div
+    class="mx-auto grid max-w-[1180px] grid-cols-1 gap-x-10 px-6 py-5 lg:grid-cols-[200px_1fr] lg:gap-x-12 lg:py-6"
+  >
+    <Sidebar />
+
+    <main class="fade-in min-w-0">
+      <About />
+      <Updates />
+      <OpenSourceList />
+      <WorkSection
+        id="publications"
+        title="Selected Publications"
+        legend="<sup>*</sup> equal contribution &nbsp;·&nbsp; <sup>†</sup> corresponding author / project lead"
+        groups={recentWorks}
+      >
+        <img
+          slot="icon"
+          src="images/arxiv-logo.svg"
+          alt="arXiv"
+          width="68"
+          height="30"
+          style="position: relative; top: 5px;"
+        />
+      </WorkSection>
+      <Talks />
+      <Experience />
+      <Footer />
+    </main>
+  </div>
+</Base>

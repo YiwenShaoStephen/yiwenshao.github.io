@@ -1,0 +1,86 @@
+---
+import { site } from "../data/site";
+import Icon from "./icons/Icon.astro";
+---
+
+<aside class="sidebar-sticky">
+  <!-- Avatar slot — drop /public/images/avatar.jpg to enable -->
+  <!--
+  <div class="mb-4 flex">
+    <img
+      src="images/avatar.jpg"
+      alt="Yiwen Shao"
+      class="h-36 w-36 rounded-full object-cover"
+      style="border: 1px solid var(--rule); padding: 4px;"
+    />
+  </div>
+  -->
+
+  <h1
+    class="text-[1.4rem] font-bold tracking-tight"
+    style="color: var(--fg); line-height: 1.2;"
+  >
+    Yiwen Shao
+  </h1>
+  <div
+    class="mt-0.5 text-[0.92rem]"
+    style="color: var(--fg-3);"
+  >
+    邵依文
+  </div>
+
+  <p
+    class="mt-2 text-[0.86rem] italic"
+    style="color: var(--fg-2); line-height: 1.4;"
+  >
+    Building <strong style="color: var(--fg); font-style: normal;">full-duplex multimodal LLMs</strong>.
+  </p>
+
+  <p
+    class="mt-4 text-[0.84rem]"
+    style="color: var(--fg-2); line-height: 1.45;"
+  >
+    {site.role}
+  </p>
+
+  <a
+    href={site.affiliation.href}
+    class="mt-2 inline-block"
+    style="background-image: none;"
+    aria-label={site.affiliation.name}
+    target="_blank"
+    rel="noreferrer noopener"
+  >
+    <img
+      src="images/nuancelabs-logo.png"
+      alt={site.affiliation.name}
+      style="display: block; max-width: 160px; height: auto;"
+    />
+  </a>
+
+  <p
+    class="mt-2 text-[0.76rem]"
+    style="color: var(--fg-3); line-height: 1.45;"
+  >
+    ex-<a href="https://ailab.tencent.com/ailab/en/index/">Tencent AI Lab &amp; Hunyuan</a>. Founded <a class="ecosystem-badge" href="https://github.com/AudenAI/Auden"><img src="images/auden-logo.png" alt="" /><span>Auden</span></a>. PhD from <a href="https://www.clsp.jhu.edu/">JHU</a>.
+  </p>
+
+  <ul class="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1.5">
+    {
+      site.social.map((s) => (
+        <li>
+          <a
+            href={s.href}
+            class="plain-link inline-flex items-center gap-1.5 text-[0.82rem]"
+            aria-label={s.label}
+          >
+            <span style="color: var(--fg-3);">
+              <Icon name={s.kind} />
+            </span>
+            <span>{s.label}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</aside>

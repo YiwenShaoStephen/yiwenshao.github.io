@@ -1,0 +1,113 @@
+---
+import type { Work } from "../data/works";
+import Icon from "./icons/Icon.astro";
+
+interface Props {
+  work: Work;
+}
+
+const { work } = Astro.props;
+
+const kindTitle: Record<string, string> = {
+  github: "Code on GitHub",
+  hf: "Hugging Face",
+  youtube: "Video",
+  slides: "Slides",
+};
+
+// Detect papers that ship via the Auden toolkit
+const audenLink = work.links?.find(
+  (l) => l.kind === "github" && l.href.includes("AudenAI/Auden")
+);
+---
+
+<article class="py-1">
+  <!-- Title row + right-aligned link icons -->
+  <div class="flex items-start justify-between gap-3">
+    <h3
+      class="min-w-0 flex-1 text-[0.88rem]"
+      style="line-height: 1.3; font-weight: 600; color: var(--fg);"
+    >
+      {
+        work.venueHref ? (
+          <a
+            href={work.venueHref}
+            class="venue-badge"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            {work.venue}
+          </a>
+        ) : (
+          <span class="venue-badge">{work.venue}</span>
+        )
+      }
+      {work.tag && <span class="honor-badge">{work.tag}</span>}
+      {audenLink && (
+        <a
+          href={audenLink.href}
+          class="ecosystem-badge"
+          target="_blank"
+          rel="noreferrer noopener"
+          title="Ships via Auden"
+        >
+          <img src="images/auden-logo.png" alt="" />
+          <span>Auden</span>
+        </a>
+      )}
+      {
+        work.venueHref ? (
+          <a class="plain-link" href={work.venueHref}>
+            {work.title}
+          </a>
+        ) : (
+          work.title
+        )
+      }
+    </h3>
+
+    {
+      work.links && work.links.length > 0 && (
+        <div class="flex flex-shrink-0 items-center gap-1 pt-[1px]">
+          {work.links.map((l) => (
+            <a
+              href={l.href}
+              class="link-icon link-icon-sm"
+              aria-label={l.label ?? kindTitle[l.kind] ?? l.kind}
+              title={l.label ?? kindTitle[l.kind] ?? l.kind}
+              target="_blank"
+              rel="noreferrer noopener"
+            >
+              {l.kind === "hf" ? (
+                <span
+                  aria-hidden="true"
+                  style="font-size: 13px; line-height: 1;"
+                >
+                  🤗
+                </span>
+              ) : (
+                <Icon name={l.kind} />
+              )}
+            </a>
+          ))}
+        </div>
+      )
+    }
+  </div>
+
+  <div
+    class="text-[0.76rem]"
+    style="color: var(--fg-2); line-height: 1.35; margin-top: 1px;"
+    set:html={work.authors}
+  />
+
+  {
+    work.description && (
+      <p
+        class="text-[0.74rem] italic"
+        style="color: var(--fg-3); line-height: 1.35; margin-top: 1px;"
+        set:html={work.description}
+      />
+    )
+  }
+</article>
