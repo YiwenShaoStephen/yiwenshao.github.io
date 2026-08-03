@@ -13,6 +13,8 @@ const blog = defineCollection({
     /** Short byline shown under the post title. */
     byline: z.string().optional(),
     tags: z.array(z.string()).default([]),
+    /** Share card for this post, relative to /public. */
+    ogImage: z.string().optional(),
     /** Audio sample that represents the post, relative to /public. */
     audio: z.string().optional(),
     draft: z.boolean().default(false),

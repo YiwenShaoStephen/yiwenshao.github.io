@@ -17,10 +17,11 @@ interface Props {
   lang: "zh" | "en";
   byline?: string;
   translation?: string;
+  ogImage?: string;
   headings: Heading[];
 }
 
-const { title, description, pubDate, lang, byline, translation, headings } =
+const { title, description, pubDate, lang, byline, translation, ogImage, headings } =
   Astro.props;
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
@@ -29,7 +30,12 @@ const dateLabel = pubDate.toISOString().slice(0, 10);
 const langLabel = lang === "zh" ? "English →" : "中文版 →";
 ---
 
-<Base title={`${title} — ${site.name}`} description={description}>
+<Base
+  title={`${title} — ${site.name}`}
+  description={description}
+  image={ogImage}
+  ogType="article"
+>
   <link
     slot="head"
     rel="stylesheet"
