@@ -1,0 +1,86 @@
+---
+interface Props {
+  lang?: "zh" | "en";
+  caption?: string;
+}
+const { lang = "en", caption } = Astro.props;
+
+const L =
+  lang === "zh"
+    ? {
+        aria: "示意图：Data、Infra、Eval 围绕 Model 发动机构成的迭代循环",
+        feedback: "反馈 · 方向与优先级",
+        fuel: "燃料 · 高留存数据",
+        output: "产出 · checkpoint",
+        speed: "转速 · 吞吐与稳定",
+        callout: "外界只看到这里",
+        hubSub: "发动机",
+        dataSub: "数据",
+        evalSub: "评测",
+        infraSub: "底座",
+        caption:
+          "fig. 0 — 四个模块，一个发动机：外界只看到 Model，但它是每个环节高质量运转后水到渠成的结果",
+      }
+    : {
+        aria: "Diagram: Data, Infra, and Eval form an iteration loop around the Model engine",
+        feedback: "feedback · direction & priorities",
+        fuel: "high-retention data",
+        output: "output · checkpoints",
+        speed: "speed · throughput & stability",
+        callout: "the only part outsiders see",
+        hubSub: "the engine",
+        dataSub: "data",
+        evalSub: "evaluation",
+        infraSub: "substrate",
+        caption:
+          "fig. 0 — four modules, one engine: outsiders only see Model, but it accrues from every link running at high quality",
+      };
+const cap = caption ?? L.caption;
+const uid = `eng-${lang}`;
+---
+
+<div class="post-fig" role="img" aria-label={L.aria}>
+  <svg viewBox="0 0 760 320" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id={`${uid}-arrB`} viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+        <path class="arrB" d="M 0 0 L 10 5 L 0 10 z"></path>
+      </marker>
+      <marker id={`${uid}-arrG`} viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+        <path class="arrG" d="M 0 0 L 10 5 L 0 10 z"></path>
+      </marker>
+    </defs>
+
+    <path class="flow fb" d="M 640,116 C 580,36 170,36 118,116" marker-end={`url(#${uid}-arrG)`}></path>
+    <text class="flow-label" x="380" y="48" text-anchor="middle">{L.feedback}</text>
+
+    <line class="flow" x1="176" y1="145" x2="310" y2="145" marker-end={`url(#${uid}-arrB)`}></line>
+    <text class="flow-label" x="243" y="131" text-anchor="middle">{L.fuel}</text>
+
+    <line class="flow" x1="450" y1="145" x2="584" y2="145" marker-end={`url(#${uid}-arrB)`}></line>
+    <text class="flow-label" x="517" y="131" text-anchor="middle">{L.output}</text>
+
+    <line class="flow" x1="380" y1="246" x2="380" y2="215" marker-end={`url(#${uid}-arrB)`}></line>
+    <text class="flow-label" x="394" y="236" text-anchor="start">{L.speed}</text>
+
+    <circle class="ring" cx="380" cy="145" r="66"></circle>
+    <circle class="hub" cx="380" cy="145" r="54"></circle>
+    <text class="hub-label" x="380" y="142" text-anchor="middle">MODEL</text>
+    <text class="hub-sub" x="380" y="162" text-anchor="middle">{L.hubSub}</text>
+
+    <line class="leader" x1="318" y1="191" x2="341" y2="183"></line>
+    <text class="callout" x="312" y="196" text-anchor="end">{L.callout}</text>
+
+    <rect class="node" x="40" y="120" width="130" height="50" rx="4"></rect>
+    <text class="node-label" x="105" y="141" text-anchor="middle">DATA</text>
+    <text class="node-sub" x="105" y="159" text-anchor="middle">{L.dataSub}</text>
+
+    <rect class="node" x="590" y="120" width="130" height="50" rx="4"></rect>
+    <text class="node-label" x="655" y="141" text-anchor="middle">EVAL</text>
+    <text class="node-sub" x="655" y="159" text-anchor="middle">{L.evalSub}</text>
+
+    <rect class="node" x="315" y="250" width="130" height="50" rx="4"></rect>
+    <text class="node-label" x="380" y="271" text-anchor="middle">INFRA</text>
+    <text class="node-sub" x="380" y="289" text-anchor="middle">{L.infraSub}</text>
+  </svg>
+  <div class="caption">{cap}</div>
+</div>

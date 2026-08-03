@@ -1,0 +1,103 @@
+---
+import Base from "./Base.astro";
+import Header from "../components/Header.astro";
+import "../styles/post.css";
+import { site } from "../data/site";
+
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  lang: "zh" | "en";
+  byline?: string;
+  translation?: string;
+  headings: Heading[];
+}
+
+const { title, description, pubDate, lang, byline, translation, headings } =
+  Astro.props;
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const toc = headings.filter((h) => h.depth === 2);
+const dateLabel = pubDate.toISOString().slice(0, 10);
+const langLabel = lang === "zh" ? "English →" : "中文版 →";
+---
+
+<Base title={`${title} — ${site.name}`} description={description}>
+  <link
+    slot="head"
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Serif+SC:wght@400;600;900&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,900&display=swap"
+  />
+
+  <Header active="blog" />
+
+  <div class="post-scope" data-lang={lang}>
+    {
+      toc.length > 1 && (
+        <nav class="post-toc" aria-label="Contents">
+          <div class="toc-title">CONTENTS</div>
+          <div class="list">
+            {toc.map((h) => (
+              <a href={`#${h.slug}`}>{h.text}</a>
+            ))}
+          </div>
+        </nav>
+      )
+    }
+
+    <header class="post-hero">
+      <div class="post-col">
+        {
+          translation && (
+            <div class="post-topbar">
+              <span class="spacer" />
+              <a href={`${base}/blog/${translation}/`}>{langLabel}</a>
+            </div>
+          )
+        }
+        <h1 class="post-title" set:html={title}></h1>
+        {byline && <p class="post-byline" set:html={byline}></p>}
+        <div class="post-date">{dateLabel}</div>
+      </div>
+    </header>
+
+    <main class="post-body">
+      <article class="post-col">
+        <slot />
+      </article>
+    </main>
+  </div>
+
+  <script is:inline>
+    (function () {
+      var links = Array.prototype.slice.call(
+        document.querySelectorAll(".post-toc a")
+      );
+      if (!links.length) return;
+      var heads = links
+        .map(function (a) {
+          return document.getElementById(a.getAttribute("href").slice(1));
+        })
+        .filter(Boolean);
+      function update() {
+        var y = window.scrollY + window.innerHeight * 0.25;
+        var idx = -1;
+        for (var i = 0; i < heads.length; i++) {
+          if (heads[i].offsetTop <= y) idx = i;
+        }
+        links.forEach(function (a, i) {
+          a.classList.toggle("active", i === idx);
+        });
+      }
+      window.addEventListener("scroll", update, { passive: true });
+      update();
+    })();
+  </script>
+</Base>

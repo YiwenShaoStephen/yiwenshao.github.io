@@ -1,0 +1,138 @@
+---
+title: "From AI Lab to Frontier Lab: How to Build a Modern Foundation-Model Team"
+description: Building a modern foundation-model team looks less and less like doing research, and more and more like systems engineering.
+pubDate: 2026-08-03
+lang: en
+translation: frontier-lab
+tags: [org, frontier-lab, career]
+byline: JHU PhD · ex-Tencent HY · now at <a href="https://www.nuancelabs.ai">Nuance Labs</a>. For anyone building a foundation-model team.
+---
+
+import EngineFigure from "../../components/blog/EngineFigure.astro";
+import EntropyFigure from "../../components/blog/EntropyFigure.astro";
+import Pull from "../../components/blog/Pull.astro";
+import Stage from "../../components/blog/Stage.astro";
+import Lesson from "../../components/blog/Lesson.astro";
+import Module from "../../components/blog/Module.astro";
+
+<EngineFigure lang="en" />
+
+## Preface: why I'm writing this
+
+The recent run of Chinese open-weight models has, I suspect, rattled Silicon Valley more than a little: GLM 5.2, Kimi K3, DeepSeek V4 (and my former employer's HY3, which probably nobody noticed 😂). Here is the part that should actually bother people: back in late 2024, DeepSeek V3 could still be written off as a one-off flash of brilliance. By now, training a frontier-grade model has become something close to an open secret inside the Chinese ML community (ps: no, not distillation...), while in the US, with all its capital, compute, and talent, only OpenAI and Anthropic have stayed above the kill line. Having spent my career straddling both sides of the Pacific, I think the core issue is organizational: very few American companies know how to build a modern foundation-model team (or perhaps they know, but can't pull it off).
+
+I had the odd fortune of living through this shift firsthand. I did my PhD at JHU, so most of my connections ended up at the big American labs: Meta, Google, Microsoft, NVIDIA. I myself, starting from my internship, kept choosing Tencent's Seattle AI Lab instead. At first the difference barely mattered. Then ChatGPT happened, and everything got dramatic. From intern, to formally joining the LLM effort (Hunyuan) in 2024, to eventually owning a module there (paid for with 80-hour-plus weeks 😂), I watched one team grow from an AI Lab into a frontier lab, end to end. I recently left to join a US startup ([Nuance Labs](https://www.nuancelabs.ai)), and the moment I walked out the door, the model wave above hit everyone's timeline. Comparing all of this against the American giants over the same period, **I keep arriving at the same judgment: the rise of Chinese LLM teams is, at its core, an organizational win.**
+
+I'm not alone in this. Kimi's Yang Zhilin made the same point about the importance of organization in [an interview](https://x.com/linasbeliunas/status/2079788585163624615), and it resonated hard. With the job change, I've been talking to friends across very different backgrounds and stages, and a whole afternoon usually covers only a fraction of it. So I'm writing it down. This post is only about how to build the team itself; my take on startups, and why I left a big-company LLM team, deserves its own post.
+
+The whole post really says one thing:
+
+<Pull>Building a modern foundation-model team looks less and less like doing research, and more and more like systems engineering.</Pull>
+
+In the last era, an AI Lab won by having someone come up with the idea. In this era, a frontier lab wins by having an organization that can run the whole stack of compute, data, engineering, and evaluation stably, at high throughput. The old game rewarded variance in individual creativity; the new game punishes variance in the system. Everything below answers a single question: what does that system look like, and how do you build one?
+
+## I. The four stages I lived through: one evolution from AI Lab to Frontier Lab
+
+Cut my last two and a half years into four segments and you get a complete evolutionary line from AI Lab to Frontier Lab. None of these stages belong to any one company. As far as I can tell, nearly every organization that tries to build foundation models steps through some of them in order; some make it all the way, others are still stuck halfway.
+
+<EntropyFigure lang="en" />
+
+<Stage head="STAGE ① · pre-2023" title="AI Lab 1.0: the boutique era">
+
+Before the LLM era (pre-2023), most AI Labs ran on scattered bets: one-to-four-person teams on small projects, prizing novelty and self-direction. Many pure-research AI Labs didn't survive the cost-cutting winter of 2022, and the survivors had to pivot toward productization and paying their own way. Wanting both at once split labs from the inside: you got the untouchable "paper aristocrats" on one side, the "poor souls" carrying delivery KPIs on the other, and it kept getting harder to quantify either side's output. The result: no OpenAI-style landmark research, and worse delivery than the cloud and applied-AI departments. I was an intern then, doing what was essentially pure research, except my topic was tied to a real product scenario instead of chasing trends. In hindsight, that was a miniature of the whole AI Lab dilemma to come.
+
+<Lesson>Creativity doesn't scale unless there's a system to carry it; and trying to be a research lab and a delivery org at once tears a lab apart from the inside first.</Lesson>
+
+</Stage>
+
+<Stage head="STAGE ② · 2023–2024" title="LLM 1.0: the brute-force merger">
+
+By 2023–24, LLMs had become the mainstream race, and every big company pooled its forces into an LLM team. But many teams got "big" wrong: they assumed that merging headcount, compute, and budget, then slicing the work along each group's specialty, would do the trick. Nearly every Big Tech company that is behind on LLMs today either passed through this stage or still hasn't left it. To be fair, this is also what got me my ticket in (I owned ASR at the time). What I saw: the team was a patchwork, the project got carved into fragments, and the cost of communication and management outran any speedup from collaboration. The early confidence gave way, by mid-project, to distrust and blame-shifting as the dominant mood. It ended in a mess, and a breakup.
+
+<Lesson>Adding people together ≠ adding capabilities together. Org design is system design.</Lesson>
+
+</Stage>
+
+<Stage head="STAGE ③" title="AI Lab 2.0: missing a forceful hand on the schedule">
+
+We were lucky enough to get a second chance: back inside the AI Lab, restarting the LLM project almost from scratch with a fresh, young team (exploring native multimodality, in parallel with the flagship LLM team next door). This was also when I grew fastest personally (moving from ASR to owning general audio understanding). This time we planned and divided the work clearly from day one, avoided the earlier traps, and patiently did the 0→1 building, with an emphasis on originality and long-termism. We still fell before dawn. The core problem: very few people realized this was a battle, not a romantic expedition. Bottom-up growth instead of top-down direction encouraged creativity but burned the most precious thing we had, which was time; and late in the game the team started to diverge again. Even with a long runway, nothing guaranteed we wouldn't decay back into Lab 1.0's boutique mode.
+
+<Lesson>This is a battle, not a romantic expedition. Bottom-up bought creativity and paid for it with the most precious time.</Lesson>
+
+</Stage>
+
+<Stage head="STAGE ④" title="LLM 2.0: transplanting the leadership">
+
+Half a year later, both our frontier team and the flagship team had made real progress (clearly better than before), yet the gap to outside teams kept widening (that's the brutal part of this race: catching up is extremely hard). The two teams merged again in a thorough reboot, and what actually changed was the org structure and the management layer. Given the previous experience I had low expectations for this reorg; I changed my mind fast. The biggest change was at the top (leaders brought in from a mature LLM team) while the executing layer stayed almost untouched. Because I kept my role as a module owner, I got a close-up view of what changed. On paper, the org chart looked a lot like LLM 1.0 or Lab 2.0. The underlying operating logic was different, and so was the output.
+
+<Lesson>Anyone can draw the org chart. The difference in output hides in the operating logic underneath.</Lesson>
+
+</Stage>
+
+What that operating logic looks like is the next section.
+
+## II. Playbook: principles for building a modern foundation-model team
+
+Read the four stages backwards and you get this playbook. Structure first, then operation.
+
+### Structure: four modules, one engine
+
+The basic anatomy of a team: Data, Infra, Model, Eval. From the outside, all anyone ever sees is Model: on the leaderboard, at the launch event, in the user's hands. Inside the team, though, Model's real role is the engine. It doesn't outrank the other modules; it's the part that links them into a loop: Data feeds it, Infra sets its iteration speed, Eval points it in the right direction. A good model is never something the model squad builds alone. When every link in the loop runs at high quality, the model accumulates almost as a byproduct. So every module's first principle is the same: help Model iterate and improve faster.
+
+I'd bet almost every LLM team (and most non-LLM teams) has these same four boxes, which is exactly what I mean by "looking alike on the surface." What separates teams is the core metric each module optimizes: same org chart, wrong metric, and the whole module pulls hard in the wrong direction. One by one:
+
+<Module code="01 / DATA" claim="The metric is how much gets used, not how much gets produced.">
+  <div slot="wrong">I've seen the failure mode too many times: quantity over quality, acting as a "deployer" of pipelines rather than a service provider to the model team. The classic report reads "we deployed N operators and produced M hours of data," and the data is so bad the downstream model won't touch it.</div>
+  <div slot="right">The right metric is the amount of data the model side actually ends up using: what's the retention rate, how much did it lift the model. Let that drive Data's internal iteration and acceleration.</div>
+</Module>
+
+<Module code="02 / INFRA" claim="A first-class citizen, but it must be built by people who've done this exact job.">
+  <div slot="wrong">The failure mode is over-engineering. The initial design gets led by engineers or researchers who have never trained at scale, the features the model side will need are never reserved, bugs pile up, and you end up with something either too rigid to use (pushing the work back onto the model team) or too naive, with throughput far too low.</div>
+  <div slot="right">You need people who are senior in exactly this, with real 0→1 experience pretraining large models, encoding those lessons into infra for the whole team. That talent is genuinely scarce; if you can't find it, better to let the model team hack ad hoc (if the infra is bad, the model team will end up writing their own anyway...)</div>
+</Module>
+
+<Module code="03 / MODEL" claim="Get a stable baseline with data first; architecture exploration comes after.">
+  <div slot="wrong">The failure mode: obsession with architecture and algorithm design. It fragments the team into incompatible schemes that are hard to merge, reinvents wheels, and worst of all, conclusions from small scale rarely transfer to large scale; they can be actively misleading.</div>
+  <div slot="right">This is not "don't do architecture." DeepSeek and Kimi K3 have shipped genuinely brilliant architectural breakthroughs, but notice that those were built on top of strong existing infra and base models. Architecture exploration is a relative luxury; don't start with castles in the air. The higher-ROI, safer path is data first: fix the framework within a limited time and scope (weigh carefully whether every layer will scale, let experienced people make the call, avoid local optima), and pour the team's mental power into building data intuition and sharpening data filtering / curation. Architecture and algorithms can advance steadily with major versions; data accumulation runs through the whole thing.</div>
+</Module>
+
+<Module code="04 / EVAL" claim="The evaluation system is the real moat.">
+  <div slot="wrong">The failure mode: irresponsibly pulling in open-source benchmarks, over-trusting existing metrics, and letting them drive model iteration. Intentionally or not, that road ends in llama4-style high scores with low competence, and a reputation collapse.</div>
+  <div slot="right">Build Eval in stages: (1) subjective evaluation by a professional human team (A/B tests) that gives clear directional guidance; (2) objective metrics with high agreement to the human evals, as the day-to-day iteration indicator. Both layers take sustained accumulation plus ever more real user feedback; you can't buy them and you can't copy them. In a real sense, Eval is the moat.</div>
+</Module>
+
+### Operation: three rules that never make the org chart
+
+Beyond the modules, a few rules decide whether this system actually runs. They are also the biggest changes I saw up close after the LLM 2.0 leadership transplant:
+
+1. **A single owner, end to end.** Every vertical has exactly one owner, responsible for the end-to-end result from data to model to eval; not sliced by function, where every failure belongs to everyone and therefore to no one. (The blame-shifting culture of LLM 1.0 traces straight back to this.)
+2. **Separate exploration from convergence; never mix them.** A hundred flowers blooming and a massed campaign are two different modes. The most expensive mistakes are exploring when you should be converging (this is what got AI Lab 2.0) and unifying too early when you should be exploring. What you pay mature leadership for is knowing when to switch, and having the nerve to actually do it.
+3. **Treat redundancy as debt.** Scale generates redundancy on its own: duplicated wheels, parallel horse races, layers of reporting. Efficient orgs have redundancy too; the difference is they keep identifying it and paying it down.
+
+## III. Who became valuable in a frontier lab
+
+When the deciding factor moved from ideas to system throughput, the valuable people changed too. Three profiles carry the highest premium in my book:
+
+1. **People with real 0→1, from-scratch LLM training experience.** Compared to brilliant scientists and researchers, this experience, bought with industrial-scale money, cuts the next team's trial-and-error time and cost enormously.
+2. **Full-stack people.** Not front-end/back-end; I mean the complete data → model → eval chain of thought, plus the hands to close the loop alone. The scaling law for headcount on an LLM team: give each such person one vertical and let them drive it end to end to the optimum. Whether "single owner" from the last section can land depends on how many of these people you have.
+3. **Deep thinkers.** Every sub-domain in this race demands real insight to decompose before you can push the capability all the way up. Cheap thinking is arguably worse than vibe research.
+
+## IV. The startup trade-off: copy the system, not the redundancy
+
+On the big-company side, I assume everyone who wants in has already built their team (if they still haven't figured it out by now, honestly, it's over...). So this section is mostly for startups.
+
+Having sat on both sides, the asymmetry is clear. Big companies' advantage is the system: infra, scale, battle-tested process. Their curse is redundancy: the duplicated building that inevitably comes with size, and the legacy nobody can touch. A startup's biggest asset is precisely that its redundancy debt is still tiny, and that's the one asset that decays automatically with time. So the trade is clear: **copy the system that big companies paid tuition for, as early as you can, and guard the low redundancy that only you have.** Three concrete rules:
+
+1. **Learn the LLM team's system, not its redundancy.** Single owners, an eval moat, data-retention metrics: install these disciplines early. Horse racing, committees, layered reporting: touch none of it.
+2. **Enter through a vertical; don't challenge general foundation models head-on.** The entry ticket for general-purpose base models is absurdly expensive now, but a complete data → model → eval loop inside one vertical is still affordable for a startup, and it's exactly what big companies never get around to polishing.
+3. **Play the latecomer's advantage: small and elite.** Give super-individuals enough context and ownership, one person as one module. That moves the system forward faster than stacking headcount.
+
+## V. Coda
+
+Back to the question in the title. Building a modern foundation-model team is not about finding the next genius; it's about building **a system in which ordinary people can keep producing frontier-level results.**
+
+From AI Lab to Frontier Lab, creativity didn't disappear; it changed address, from being the system itself to being one feature inside the system. There's nothing wrong with research heroism. It just no longer decides who wins.
+
+If you work at an American frontier lab, this is the part worth being anxious about: not any single release, and not "why didn't we keep Yang Zhilin," but the fact that the other side has turned shipping, again and again, into an organizational capability. Geniuses can be poached, models go stale in six months; organizational capability doesn't transfer. And to my former colleagues in China: I hope this made you smile, because you know there's no secret here, just one reorg after another.
+
+As for why, after seeing this system up close, I still chose to jump out and build a small one from zero at a startup: next post.

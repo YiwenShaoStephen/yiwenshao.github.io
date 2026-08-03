@@ -1,0 +1,84 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import Header from "../../components/Header.astro";
+import { site } from "../../data/site";
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+
+const all = (await getCollection("blog", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+/** Show each translation pair once: prefer the English entry as the row. */
+const ids = new Set(all.map((p) => p.id));
+const rows = all.filter(
+  (p) =>
+    !(p.data.lang === "zh" && p.data.translation && ids.has(p.data.translation))
+);
+---
+
+<Base title={`Blog — ${site.name}`} description={`Writing by ${site.name}.`}>
+  <Header active="blog" />
+
+  <div class="mx-auto max-w-[720px] px-6 py-12">
+    <div class="mb-10">
+      <h1 class="text-[1.8rem] font-bold" style="color: var(--fg);">Blog</h1>
+      <p class="mt-1 text-[0.95rem]" style="color: var(--fg-2);">
+        Long-form notes on building foundation-model teams and systems.
+      </p>
+    </div>
+
+    <ul>
+      {
+        rows.map((p) => {
+          const zhId =
+            p.data.lang === "zh"
+              ? p.id
+              : p.data.translation && ids.has(p.data.translation)
+                ? p.data.translation
+                : null;
+          const enId = p.data.lang === "en" ? p.id : null;
+          return (
+            <li class="py-5" style="border-bottom: 1px solid var(--rule-2);">
+              <div
+                class="text-[0.78rem] font-medium"
+                style="color: var(--fg-3); font-family: 'IBM Plex Mono', monospace;"
+              >
+                {p.data.pubDate.toISOString().slice(0, 10)}
+              </div>
+              <h2 class="mt-1 text-[1.15rem] font-bold leading-snug">
+                <a class="plain-link" href={`${base}/blog/${p.id}/`}>
+                  {p.data.title}
+                </a>
+              </h2>
+              <p class="mt-1.5 text-[0.92rem]" style="color: var(--fg-2);">
+                {p.data.description}
+              </p>
+              <div class="mt-2 flex gap-2 text-[0.78rem]">
+                {enId && (
+                  <a
+                    href={`${base}/blog/${enId}/`}
+                    class="rounded px-2 py-0.5"
+                    style="border: 1px solid var(--rule); color: var(--fg-2);"
+                  >
+                    EN
+                  </a>
+                )}
+                {zhId && (
+                  <a
+                    href={`${base}/blog/${zhId}/`}
+                    class="rounded px-2 py-0.5"
+                    style="border: 1px solid var(--rule); color: var(--fg-2);"
+                  >
+                    中文
+                  </a>
+                )}
+              </div>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </div>
+</Base>

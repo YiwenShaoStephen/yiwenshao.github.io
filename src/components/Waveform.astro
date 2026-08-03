@@ -1,0 +1,148 @@
+---
+/**
+ * fig. 0 — full-duplex dialogue waveform.
+ * Two speech-envelope lanes (A: human, B: model) on a shared timeline;
+ * shaded spans mark overlap, where both sides are talking at once.
+ */
+const W = 760;
+
+type Burst = [start: number, end: number, amp: number, phase: number];
+const lanesA: Burst[] = [
+  [30, 205, 26, 0.4],
+  [320, 530, 30, 1.7],
+  [600, 750, 24, 3.1],
+];
+const lanesB: Burst[] = [
+  [175, 340, 24, 0.9],
+  [495, 645, 28, 2.2],
+  [695, 760, 20, 0.2],
+];
+
+/** Symmetric speech envelope for one lane: closed path around the midline. */
+function lanePath(bursts: Burst[], mid: number): string {
+  const pts: string[] = [];
+  const top: [number, number][] = [];
+  for (const [s, e, amp, ph] of bursts) {
+    const n = Math.max(10, Math.round((e - s) / 7));
+    for (let i = 0; i <= n; i++) {
+      const x = s + ((e - s) * i) / n;
+      const t = i / n;
+      const window = Math.sin(Math.PI * t) ** 0.7; // fade in/out at burst edges
+      const detail =
+        0.62 +
+        0.23 * Math.sin(0.11 * x + ph) +
+        0.15 * Math.sin(0.037 * x + 2 * ph);
+      top.push([x, amp * window * detail]);
+    }
+    top.push([e + 0.01, 0]);
+  }
+  // build closed symmetric shape: along the top, back along the mirrored bottom
+  let d = `M ${bursts[0][0]},${mid}`;
+  for (const [x, a] of top) d += ` L ${x.toFixed(1)},${(mid - a).toFixed(1)}`;
+  for (let i = top.length - 1; i >= 0; i--) {
+    const [x, a] = top[i];
+    d += ` L ${x.toFixed(1)},${(mid + a).toFixed(1)}`;
+  }
+  return d + " Z";
+}
+
+/** Time spans where both lanes are active. */
+function overlaps(a: Burst[], b: Burst[]): [number, number][] {
+  const out: [number, number][] = [];
+  for (const [s1, e1] of a)
+    for (const [s2, e2] of b) {
+      const s = Math.max(s1, s2);
+      const e = Math.min(e1, e2);
+      if (e - s > 8) out.push([s, e]);
+    }
+  return out;
+}
+
+const pathA = lanePath(lanesA, 78);
+const pathB = lanePath(lanesB, 168);
+const ov = overlaps(lanesA, lanesB);
+---
+
+<figure class="wave-fig">
+  <figcaption>
+    fig. 0 — full-duplex: both streams stay live, and neither side waits for the other to finish
+  </figcaption>
+  <svg viewBox="0 0 760 232" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two overlapping speech waveforms: a full-duplex conversation">
+    <!-- overlap spans -->
+    {ov.map(([s, e]) => (
+      <rect class="ov" x={s} y="30" width={e - s} height="176" rx="2"></rect>
+    ))}
+    <text class="ov-label" x={(ov[0][0] + ov[0][1]) / 2} y="22" text-anchor="middle">overlap</text>
+
+    <!-- midlines -->
+    <line class="mid" x1="0" y1="78" x2="760" y2="78"></line>
+    <line class="mid" x1="0" y1="168" x2="760" y2="168"></line>
+
+    <!-- envelopes -->
+    <path class="lane a" d={pathA}></path>
+    <path class="lane b" d={pathB}></path>
+
+    <!-- lane labels -->
+    <text class="lane-label" x="4" y="46">A · you</text>
+    <text class="lane-label b" x="4" y="136">B · the model</text>
+
+    <!-- sweeping playhead -->
+    <g class="playhead">
+      <line x1="0" y1="14" x2="0" y2="212"></line>
+    </g>
+
+    <!-- time axis -->
+    <text class="axis" x="758" y="228" text-anchor="end">→ t</text>
+  </svg>
+</figure>
+
+<style>
+  .wave-fig {
+    margin: 2.4rem 0 0;
+    overflow-x: auto;
+  }
+  .wave-fig svg {
+    display: block;
+    width: 100%;
+    min-width: 580px;
+    height: auto;
+  }
+  .wave-fig figcaption {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--fg-3);
+    letter-spacing: 0.04em;
+    padding-top: 1.1rem;
+    margin-bottom: 0.9rem;
+    border-top: 1px solid var(--rule);
+  }
+  .lane.a { fill: var(--accent); opacity: 0.75; }
+  .lane.b { fill: var(--highlight); opacity: 0.7; }
+  .mid { stroke: var(--rule); stroke-width: 1; }
+  .ov { fill: color-mix(in srgb, var(--accent) 9%, transparent); }
+  .ov-label,
+  .lane-label,
+  .axis {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    fill: var(--fg-3);
+    letter-spacing: 0.08em;
+  }
+  .lane-label { fill: var(--accent); font-weight: 600; }
+  .lane-label.b { fill: var(--highlight); }
+  .playhead line {
+    stroke: var(--fg-2);
+    stroke-width: 1.2;
+    stroke-dasharray: 3 3;
+    opacity: 0.8;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .playhead {
+      animation: sweep 14s linear infinite;
+    }
+  }
+  @keyframes sweep {
+    from { transform: translateX(0); }
+    to { transform: translateX(760px); }
+  }
+</style>

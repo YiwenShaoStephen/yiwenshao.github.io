@@ -1,0 +1,181 @@
+---
+import { experience, education, type ExperienceItem } from "../data/experience";
+
+interface Props {
+  num: string;
+}
+const { num } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+
+const columns: { title: string; entries: ExperienceItem[] }[] = [
+  { title: "Experience", entries: [...experience] },
+  { title: "Education", entries: [...education] },
+];
+---
+
+<section class="sec" id="experience">
+  <div class="sec-eyebrow">{num} / CAREER</div>
+  <h2 class="sec-title">Experience &amp; education</h2>
+
+  <div class="cols">
+    {
+      columns.map((col) => (
+        <div class="col">
+          <h3 class="col-title">{col.title}</h3>
+          <ol class="tl">
+            {col.entries.map((e) => (
+              <li class="tl-item">
+                <div class="row">
+                  <div class="logo">
+                    <img src={`${base}/${e.logo}`} alt="" loading="lazy" />
+                  </div>
+                  <div class="body">
+                    <div class="role">{e.role}</div>
+                    <div class="org">
+                      {e.orgHref ? <a href={e.orgHref}>{e.org}</a> : e.org}
+                      {e.location && <span class="loc"> · {e.location}</span>}
+                    </div>
+                    <div class="period">{e.period}</div>
+                    {e.advisorLinks && e.advisorLinks.length > 0 && (
+                      <div class="adv">
+                        {e.advisorLinks.length === 1 ? "Supervisor" : "Advisors"}:{" "}
+                        {e.advisorLinks.map((a, i) => (
+                          <>
+                            {i > 0 && ", "}
+                            <a href={a.href}>{a.name}</a>
+                          </>
+                        ))}
+                      </div>
+                    )}
+                    {e.bullets && e.bullets.length > 0 ? (
+                      <ul class="pts">
+                        {e.bullets.map((b) => (
+                          <li set:html={b} />
+                        ))}
+                      </ul>
+                    ) : (
+                      e.description && <p class="desc">{e.description}</p>
+                    )}
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .cols {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem 2.6rem;
+    margin-top: 0.4rem;
+  }
+  @media (min-width: 1180px) {
+    .cols { grid-template-columns: 1fr 1fr; }
+  }
+
+  .col-title {
+    font-family: var(--mono);
+    font-size: 0.76rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    margin: 0 0 0.5rem;
+  }
+
+  .tl {
+    position: relative;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .tl::before {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 8px;
+    bottom: 8px;
+    width: 1px;
+    background: var(--rule);
+  }
+  .tl-item {
+    position: relative;
+    padding: 0.5rem 0 0.85rem 24px;
+  }
+  .tl-item::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 13px;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--accent);
+    z-index: 1;
+  }
+
+  .row { display: flex; align-items: flex-start; gap: 0.8rem; }
+  .logo {
+    flex: none;
+    width: 104px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .logo img {
+    max-height: 48px;
+    max-width: 100%;
+    object-fit: contain;
+  }
+  :global(:root.dark) .logo {
+    background: #fff;
+    border-radius: 5px;
+    padding: 3px 6px;
+  }
+
+  .body { min-width: 0; flex: 1; }
+  .role { font-size: 0.92rem; font-weight: 700; line-height: 1.25; color: var(--fg); }
+  .org { margin-top: 2px; font-size: 0.84rem; color: var(--fg-2); }
+  .org .loc { color: var(--fg-3); }
+  .period {
+    margin-top: 2px;
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.02em;
+    color: var(--fg-3);
+  }
+  .adv { margin-top: 4px; font-size: 0.8rem; color: var(--fg-3); }
+
+  .pts { margin: 0.45rem 0 0; padding: 0; list-style: none; }
+  .pts li {
+    position: relative;
+    padding-left: 0.9rem;
+    margin-bottom: 0.25rem;
+    font-size: 0.84rem;
+    line-height: 1.5;
+    color: var(--fg-2);
+  }
+  .pts li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.58em;
+    width: 4px;
+    height: 4px;
+    background: var(--accent);
+    border-radius: 1px;
+  }
+  .desc {
+    margin: 0.35rem 0 0;
+    font-size: 0.84rem;
+    line-height: 1.5;
+    color: var(--fg-2);
+  }
+</style>

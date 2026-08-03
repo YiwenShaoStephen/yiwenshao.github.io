@@ -1,0 +1,212 @@
+---
+import Base from "../layouts/Base.astro";
+import Header from "../components/Header.astro";
+import Icon from "../components/icons/Icon.astro";
+import { site } from "../data/site";
+import { recentWorks } from "../data/works";
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const scholar = site.social.find((s) => s.kind === "scholar")?.href;
+---
+
+<Base
+  title={`Publications — ${site.name}`}
+  description={`Selected publications by ${site.name} on speech, audio, and multimodal LLMs.`}
+>
+  <Header active="pubs" />
+
+  <section class="pub-head">
+    <div class="wrap">
+      <div class="sec-eyebrow">PUBLICATIONS</div>
+      <h1>
+        Selected publications
+        <img class="arxiv" src={`${base}/images/arxiv-logo.svg`} alt="arXiv" />
+      </h1>
+      <p class="legend">
+        <sup>*</sup> equal contribution &nbsp;·&nbsp;
+        <sup>&dagger;</sup> corresponding author / project lead
+      </p>
+      <nav class="jump">
+        {
+          recentWorks.map((g) => (
+            <a href={`#${g.id}`}>{g.title}</a>
+          ))
+        }
+      </nav>
+    </div>
+  </section>
+
+  <main class="wrap">
+    {
+      recentWorks.map((g) => (
+        <section class="area" id={g.id}>
+          <h2 class="area-title">{g.title}</h2>
+          {g.works.map((w) => (
+            <article class:list={["pub", w.thumb && "has-thumb"]}>
+              <div class="t">
+                {w.venueHref ? <a href={w.venueHref}>{w.title}</a> : w.title}
+              </div>
+              <div class="a" set:html={w.authors} />
+              {w.description && <p class="desc">{w.description}</p>}
+              <div class="m">
+                {w.venueHref ? (
+                  <a class="venue-badge" href={w.venueHref}>{w.venue}</a>
+                ) : (
+                  <span class="venue-badge">{w.venue}</span>
+                )}
+                {w.tag && <span class="honor-badge">{w.tag}</span>}
+                <span class="links">
+                  {(w.links ?? []).map((l) => (
+                    <a href={l.href}>
+                      <Icon name={l.kind} />
+                      {l.label ?? l.kind}
+                    </a>
+                  ))}
+                </span>
+              </div>
+              {w.thumb && (
+                <span class="thumb">
+                  <img src={`${base}/${w.thumb}`} alt="" loading="lazy" />
+                </span>
+              )}
+            </article>
+          ))}
+        </section>
+      ))
+    }
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      © 2026 Yiwen Shao ·
+      <a href={`${base}/`}>Homepage</a> ·
+      <a href={scholar}>Google Scholar</a>
+    </div>
+  </footer>
+</Base>
+
+<style>
+  .pub-head {
+    position: relative;
+    border-bottom: 1px solid var(--rule);
+    padding: 3rem 0 1.8rem;
+    overflow: hidden;
+  }
+  .pub-head::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(to right, var(--grid) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+    background-size: 28px 28px;
+    -webkit-mask-image: linear-gradient(to bottom, black 20%, transparent 96%);
+            mask-image: linear-gradient(to bottom, black 20%, transparent 96%);
+    pointer-events: none;
+  }
+  .pub-head .wrap { position: relative; }
+  .pub-head h1 {
+    font-family: var(--serif);
+    font-weight: 900;
+    font-size: 2.1rem;
+    margin: 0;
+    color: var(--fg);
+  }
+  .pub-head h1 .arxiv {
+    display: inline;
+    height: 22px;
+    width: auto;
+    margin-left: 9px;
+    vertical-align: baseline;
+    position: relative;
+    top: 2px;
+  }
+  :global(:root.dark) .pub-head h1 .arxiv { filter: grayscale(1) invert(1); }
+
+  .jump {
+    margin-top: 1.2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+  }
+  .jump a {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--fg-2);
+    border: 1px solid var(--rule);
+    border-radius: 9999px;
+    padding: 3px 11px;
+  }
+  .jump a:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+    text-decoration: none;
+  }
+
+  main { padding-bottom: 1rem; }
+
+  .area { margin-top: 2.4rem; scroll-margin-top: 4rem; }
+  .area-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--fg-3);
+    margin: 0 0 0.4rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .pub {
+    padding: 1.1rem 0;
+    border-bottom: 1px solid var(--rule-2);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0 18px;
+  }
+  .pub.has-thumb { grid-template-columns: 1fr 132px; }
+  .pub .thumb {
+    grid-row: 1 / span 4;
+    grid-column: 2;
+    align-self: center;
+    background: #fff;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 4px;
+  }
+  .pub .thumb img { display: block; width: 100%; height: 78px; object-fit: contain; }
+
+  .pub .t { font-weight: 700; font-size: 1rem; line-height: 1.45; color: var(--fg); }
+  .pub .t a { color: var(--fg); }
+  .pub .t a:hover { color: var(--accent); text-decoration: none; }
+  .pub .a { margin-top: 3px; font-size: 0.82rem; color: var(--fg-2); }
+  .pub .desc {
+    margin: 0.45rem 0 0;
+    font-size: 0.88rem;
+    line-height: 1.55;
+    color: var(--fg-2);
+  }
+  .pub .m {
+    margin-top: 0.6rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+    font-size: 0.8rem;
+  }
+
+  .legend {
+    margin: 0.6rem 0 0;
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.02em;
+    color: var(--fg-2);
+  }
+  .legend sup { color: var(--accent); font-weight: 700; }
+
+  @media (max-width: 560px) {
+    .pub.has-thumb { grid-template-columns: 1fr; }
+    .pub .thumb { display: none; }
+  }
+</style>

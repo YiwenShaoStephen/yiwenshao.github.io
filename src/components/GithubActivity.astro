@@ -1,0 +1,203 @@
+---
+/**
+ * Contribution calendar, read at build time from GitHub's own profile endpoint
+ * (the same data the profile page renders). That endpoint sends no CORS header,
+ * so it cannot be fetched from the browser; a scheduled rebuild keeps it fresh.
+ * Renders nothing if GitHub is unreachable during the build.
+ */
+interface Props {
+  user?: string;
+}
+const { user = "YiwenShaoStephen" } = Astro.props;
+
+type Day = { date: string; level: number; count: number };
+
+async function calendar(login: string): Promise<Day[]> {
+  const res = await fetch(`https://github.com/users/${login}/contributions`, {
+    headers: { "User-Agent": "astro-build" },
+  });
+  if (!res.ok) throw new Error(`github ${res.status}`);
+  const html = await res.text();
+
+  const counts = new Map<string, number>();
+  for (const m of html.matchAll(
+    /<tool-tip[^>]*\bfor="([^"]+)"[^>]*>([^<]*)<\/tool-tip>/g
+  )) {
+    const n = /^No contributions/.test(m[2]) ? 0 : parseInt(m[2], 10);
+    counts.set(m[1], Number.isFinite(n) ? n : 0);
+  }
+
+  const days: Day[] = [];
+  for (const m of html.matchAll(/<td\b[^>]*class="ContributionCalendar-day"[^>]*>/g)) {
+    const tag = m[0];
+    const date = tag.match(/data-date="([^"]+)"/)?.[1];
+    if (!date) continue; // trailing placeholder cells carry no date
+    const level = Number(tag.match(/data-level="(\d+)"/)?.[1] ?? 0);
+    const id = tag.match(/\bid="([^"]+)"/)?.[1] ?? "";
+    days.push({ date, level, count: counts.get(id) ?? 0 });
+  }
+  days.sort((a, b) => a.date.localeCompare(b.date));
+  return days;
+}
+
+let days: Day[] = [];
+try {
+  days = await calendar(user);
+} catch (e) {
+  console.warn(`[github-activity] skipped: ${(e as Error).message}`);
+}
+
+const total = days.reduce((n, d) => n + d.count, 0);
+
+// pad so the first column starts on a Sunday, then lay out 7 rows per week
+const CELL = 11;
+const GAP = 3;
+const TOP = 15;
+const LEFT = 25;
+const lead = days.length ? new Date(`${days[0].date}T00:00:00Z`).getUTCDay() : 0;
+const cells: (Day | null)[] = [...Array(lead).fill(null), ...days];
+const weeks = Math.ceil(cells.length / 7);
+const W = LEFT + weeks * (CELL + GAP);
+const H = TOP + 7 * (CELL + GAP);
+
+const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const monthMarks: { x: number; label: string }[] = [];
+let lastMonth = -1;
+cells.forEach((c, i) => {
+  if (!c || i % 7 !== 0) return;
+  const m = new Date(`${c.date}T00:00:00Z`).getUTCMonth();
+  if (m !== lastMonth) {
+    lastMonth = m;
+    monthMarks.push({ x: LEFT + Math.floor(i / 7) * (CELL + GAP), label: MONTHS[m] });
+  }
+});
+const dayMarks = [
+  { row: 1, label: "Mon" },
+  { row: 3, label: "Wed" },
+  { row: 5, label: "Fri" },
+];
+---
+
+{
+  days.length > 0 && (
+    <section class="gh" id="activity">
+      <div class="gh-meta">
+        <span class="lbl">GITHUB</span>
+        <span>{total.toLocaleString()} contributions in the past year</span>
+        <a href={`https://github.com/${user}`}>@{user}</a>
+      </div>
+
+      <div class="gh-canvas">
+        <svg
+          viewBox={`0 0 ${W} ${H}`}
+          width={W}
+          xmlns="http://www.w3.org/2000/svg"
+          role="img"
+          aria-label={`${total} GitHub contributions in the past year`}
+        >
+          {monthMarks.map((m) => (
+            <text class="ml" x={m.x} y="9">{m.label}</text>
+          ))}
+          {dayMarks.map((d) => (
+            <text class="dl" x="0" y={TOP + d.row * (CELL + GAP) + CELL - 1}>
+              {d.label}
+            </text>
+          ))}
+          {cells.map((c, i) =>
+            c ? (
+              <rect
+                class="c"
+                data-l={c.level}
+                x={LEFT + Math.floor(i / 7) * (CELL + GAP)}
+                y={TOP + (i % 7) * (CELL + GAP)}
+                width={CELL}
+                height={CELL}
+                rx="2"
+              >
+                <title>{c.count === 0 ? "No contributions" : `${c.count} contributions`} on {c.date}</title>
+              </rect>
+            ) : null
+          )}
+        </svg>
+      </div>
+
+      <div class="gh-foot">
+        <span class="scale">
+          <span>less</span>
+          <i data-l="0" /><i data-l="1" /><i data-l="2" /><i data-l="3" /><i data-l="4" />
+          <span>more</span>
+        </span>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  /* GitHub's own contribution palette */
+  .gh {
+    --g0: #ebedf0;
+    --g1: #9be9a8;
+    --g2: #40c463;
+    --g3: #30a14e;
+    --g4: #216e39;
+    margin-top: 1.4rem;
+  }
+  :global(:root.dark) .gh {
+    --g0: #161b22;
+    --g1: #0e4429;
+    --g2: #006d32;
+    --g3: #26a641;
+    --g4: #39d353;
+  }
+
+  .gh-meta {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    color: var(--fg-2);
+    margin-bottom: 0.6rem;
+  }
+  .gh-meta .lbl {
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    color: var(--fg-3);
+  }
+  .gh-meta a { margin-left: auto; font-size: 0.72rem; }
+
+  .gh-canvas { overflow-x: auto; padding-bottom: 2px; }
+  .gh-canvas svg { display: block; max-width: 100%; height: auto; }
+
+  .c { fill: var(--g0); }
+  .c[data-l="1"] { fill: var(--g1); }
+  .c[data-l="2"] { fill: var(--g2); }
+  .c[data-l="3"] { fill: var(--g3); }
+  .c[data-l="4"] { fill: var(--g4); }
+  .ml,
+  .dl { font-family: var(--mono); font-size: 9px; fill: var(--fg-3); }
+
+  .gh-foot {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 0.55rem;
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    color: var(--fg-3);
+  }
+  .scale { margin-left: auto; display: inline-flex; align-items: center; gap: 3px; }
+  .scale i {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    display: inline-block;
+    background: var(--g0);
+  }
+  .scale i[data-l="1"] { background: var(--g1); }
+  .scale i[data-l="2"] { background: var(--g2); }
+  .scale i[data-l="3"] { background: var(--g3); }
+  .scale i[data-l="4"] { background: var(--g4); }
+  .scale span { margin: 0 2px; }
+</style>

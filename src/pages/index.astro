@@ -1,62 +1,199 @@
 ---
 import Base from "../layouts/Base.astro";
-import Sidebar from "../components/Sidebar.astro";
+import Header from "../components/Header.astro";
 import About from "../components/About.astro";
-import OpenSourceList from "../components/OpenSourceList.astro";
-import Updates from "../components/Updates.astro";
-import WorkSection from "../components/WorkSection.astro";
-import Talks from "../components/Talks.astro";
-import Experience from "../components/Experience.astro";
-import Footer from "../components/Footer.astro";
+import Sidebar from "../components/Sidebar.astro";
+import Career from "../components/Career.astro";
+import Waveform from "../components/Waveform.astro";
 import Icon from "../components/icons/Icon.astro";
-import { recentWorks } from "../data/works";
+import { getCollection } from "astro:content";
+import { site } from "../data/site";
+import { updates } from "../data/updates";
+import { openSource } from "../data/openSource";
+import { talks } from "../data/talks";
 
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+
+const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+const ids = new Set(posts.map((p) => p.id));
+const postRows = posts
+  .filter(
+    (p) =>
+      !(
+        p.data.lang === "zh" &&
+        p.data.translation &&
+        ids.has(p.data.translation)
+      )
+  )
+  .slice(0, 3);
+
+let n = 0;
+const num = () => String(++n).padStart(2, "0");
+const secs = {
+  news: num(),
+  blog: num(),
+  oss: num(),
+  talks: num(),
+  xp: num(),
+};
 ---
 
 <Base>
-  <!-- Floating theme toggle (top-right) -->
-  <button
-    type="button"
-    data-theme-toggle
-    class="fixed top-4 right-4 z-30 rounded-full p-2 transition-colors plain-link"
-    style="border: 1px solid var(--rule); background: var(--bg); color: var(--fg-2);"
-    aria-label="Toggle dark mode"
-  >
-    <span class="block dark:hidden">
-      <Icon name="moon" />
-    </span>
-    <span class="hidden dark:block">
-      <Icon name="sun" />
-    </span>
-  </button>
+  <Header active="home" />
 
-  <div
-    class="mx-auto grid max-w-[1180px] grid-cols-1 gap-x-10 px-6 py-5 lg:grid-cols-[200px_1fr] lg:gap-x-12 lg:py-6"
-  >
+  <div class="shell">
     <Sidebar />
 
-    <main class="fade-in min-w-0">
+    <main>
       <About />
-      <Updates />
-      <OpenSourceList />
-      <WorkSection
-        id="publications"
-        title="Selected Publications"
-        legend="<sup>*</sup> equal contribution &nbsp;·&nbsp; <sup>†</sup> corresponding author / project lead"
-        groups={recentWorks}
-      >
-        <img
-          slot="icon"
-          src="images/arxiv-logo.svg"
-          alt="arXiv"
-          width="68"
-          height="30"
-          style="position: relative; top: 5px;"
-        />
-      </WorkSection>
-      <Talks />
-      <Experience />
-      <Footer />
+
+      <section class="lead">
+        <Waveform />
+        <div class="hiring">
+          <strong class="tag">📢 We're hiring</strong> at
+          <a href="https://www.nuancelabs.ai/">Nuance Labs</a> — research scientists
+          and interns in MLLM / LLM. Reach out via
+          <a href="mailto:yshao18@jhu.edu">email</a>.
+        </div>
+      </section>
+
+
+    <!-- ───────────────── news ───────────────── -->
+    <section class="sec" id="news">
+      <div class="sec-eyebrow">{secs.news} / NEWS</div>
+      <h2 class="sec-title">Recent updates</h2>
+      <ul class="news">
+        {
+          updates.slice(0, 8).map((u) => (
+            <li>
+              <span class="k" title={u.kind}>
+                {u.iconSrc ? (
+                  <img src={`${base}/${u.iconSrc}`} alt="" />
+                ) : u.kind === "paper" ? (
+                  <img class="wide" src={`${base}/images/arxiv-logo.svg`} alt="arXiv" />
+                ) : u.kind === "talk" ? (
+                  <Icon name="youtube" />
+                ) : u.kind === "oss" ? (
+                  <Icon name="github" />
+                ) : (
+                  <Icon name="linkedin" />
+                )}
+              </span>
+              <span class="d">{u.date}</span>
+              <span set:html={u.body} />
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <!-- ───────────────── blog ───────────────── -->
+    <section class="sec" id="blog">
+      <div class="sec-eyebrow">{secs.blog} / WRITING</div>
+      <h2 class="sec-title">Blog</h2>
+      {
+        postRows.map((p) => {
+          const zhId =
+            p.data.lang === "zh"
+              ? p.id
+              : p.data.translation && ids.has(p.data.translation)
+                ? p.data.translation
+                : null;
+          return (
+            <article class="post-card">
+              <div class="d">{p.data.pubDate.toISOString().slice(0, 10)}</div>
+              <h3>
+                <a href={`${base}/blog/${p.id}/`}>{p.data.title}</a>
+              </h3>
+              <p>{p.data.description}</p>
+              <div class="langs">
+                <a href={`${base}/blog/${p.id}/`}>
+                  {p.data.lang === "en" ? "EN" : "中文"}
+                </a>
+                {zhId && p.data.lang === "en" && (
+                  <a href={`${base}/blog/${zhId}/`}>中文</a>
+                )}
+              </div>
+            </article>
+          );
+        })
+      }
+      <div class="sec-more"><a href={`${base}/blog/`}>All posts →</a></div>
+    </section>
+
+    <!-- ───────────────── open source ───────────────── -->
+    <section class="sec" id="oss">
+      <div class="sec-eyebrow">{secs.oss} / OPEN SOURCE</div>
+      <h2 class="sec-title">Open source</h2>
+      <ul class="oss">
+        {
+          openSource.map((t) => (
+            <li>
+              <div class="row1">
+                <a class="name plain-link" href={t.href} style="display: inline-flex; align-items: center; gap: 6px;">
+                  <Icon name="github" />{t.name}
+                </a>
+                {t.hf && (
+                  <a class="icon-link" href={t.hf} aria-label="Hugging Face">
+                    <Icon name="hf" />
+                  </a>
+                )}
+                <span
+                  class:list={[
+                    "role",
+                    /founder|creator/i.test(t.role) && "hot",
+                  ]}
+                >
+                  {t.role}
+                </span>
+                <span class="yr">{t.years}</span>
+              </div>
+              <p class="blurb">{t.blurb}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <!-- ───────────────── talks ───────────────── -->
+    <section class="sec" id="talks">
+      <div class="sec-eyebrow">{secs.talks} / TALKS</div>
+      <h2 class="sec-title">Invited talks</h2>
+      <ul>
+        {
+          talks.map((t) => (
+            <li class="talk">
+              <span class="d">{t.date}</span>
+              <span>
+                <span class="t">{t.title}</span>
+                <span class="v">
+                  {" — "}
+                  {t.venueHref ? <a href={t.venueHref}>{t.venue}</a> : t.venue}
+                </span>
+                <span class="links">
+                  {(t.links ?? []).map((l) => (
+                    <a href={l.href}>
+                      <Icon name={l.kind} />
+                      {l.kind}
+                    </a>
+                  ))}
+                </span>
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <Career num={secs.xp} />
+
+      <footer class="site-footer">
+        © 2026 Yiwen Shao ·
+        <a href="https://github.com/YiwenShaoStephen">GitHub</a> ·
+        <a href={`${base}/rss.xml`}>RSS</a>
+      </footer>
     </main>
   </div>
 </Base>

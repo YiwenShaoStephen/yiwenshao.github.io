@@ -29,7 +29,7 @@ const pageUrl = new URL(Astro.url.pathname, Astro.site).toString();
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,600;8..60,900&display=swap"
     />
 
     <script is:inline>
@@ -44,6 +44,7 @@ const pageUrl = new URL(Astro.url.pathname, Astro.site).toString();
         } catch (e) {}
       })();
     </script>
+    <slot name="head" />
   </head>
   <body>
     <slot />

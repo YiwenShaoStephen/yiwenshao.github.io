@@ -1,0 +1,11 @@
+---
+interface Props {
+  tag?: string;
+}
+const { tag = "LESSON" } = Astro.props;
+---
+
+<div class="post-lesson">
+  <span class="tag">{tag}</span>
+  <p><slot /></p>
+</div>

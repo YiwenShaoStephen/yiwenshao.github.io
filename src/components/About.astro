@@ -1,60 +1,39 @@
 ---
 import { site } from "../data/site";
+import GithubActivity from "./GithubActivity.astro";
 ---
 
-<section id="about" class="section-block">
-  <p
-    class="mt-2 text-[0.95rem]"
-    style="color: var(--fg); line-height: 1.55;"
-  >
+<section class="sec about" id="about">
+  <div class="sec-eyebrow">ABOUT</div>
+
+  <p>
     I'm currently a {site.role} at <a href={site.affiliation.href}>{site.affiliation.name}</a>,
     building <strong>full-duplex multimodal LLMs</strong>.
   </p>
 
-  <p
-    class="mt-2 text-[0.95rem]"
-    style="color: var(--fg-2); line-height: 1.55;"
-  >
+  <p>
     Previously Senior Researcher at <a
-      href="https://ailab.tencent.com/ailab/en/index/">Tencent AI Lab &amp;
-      Hunyuan</a> (Bellevue) under <a
+      href="https://ailab.tencent.com/ailab/en/index/">Tencent AI Lab &amp; Hunyuan</a>
+    (Bellevue) under <a
       href="https://scholar.google.com/citations?user=tMY31_gAAAAJ">Dong Yu (俞栋)</a> —
     led <strong>audio-language pretraining</strong> and <strong>representation
-      learning</strong>, founded <a
+    learning</strong>, founded <a
       class="ecosystem-badge"
       href="https://github.com/AudenAI/Auden"><img src="images/auden-logo.png" alt="" /><span
       >Auden</span></a>, key contributor to the initial launch of Hunyuan
     Speech 1.0, and led audio pretraining for Hunyuan Speech 3.0.
   </p>
 
-  <p
-    class="mt-2 text-[0.95rem]"
-    style="color: var(--fg-2); line-height: 1.55;"
-  >
+  <p>
     Ph.D. from <a href="https://www.clsp.jhu.edu/">JHU CLSP</a>, advised by <a
       href="https://danielpovey.com/">Daniel Povey</a> and <a
       href="https://www.clsp.jhu.edu/people/sanjeev-khudanpur/">Sanjeev
-    Khudanpur</a> — focused on ASR and related topics.
+    Khudanpur</a> — focused on ASR and audio understanding.
   </p>
 
-  <div class="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1.5">
-    {
-      site.topics.map((t) => (
-        <span
-          class="text-[0.74rem]"
-          style="font-family: ui-monospace, Menlo, monospace; color: var(--fg-3); padding: 2px 8px; border: 1px solid var(--rule); border-radius: 3px;"
-        >
-          {t}
-        </span>
-      ))
-    }
+  <div class="topics">
+    {site.topics.map((t) => <span>{t}</span>)}
   </div>
 
-  <div
-    class="mt-4 text-[0.9rem]"
-    style="padding: 10px 14px; background: color-mix(in oklab, var(--highlight) 7%, transparent); border-left: 3px solid var(--highlight); border-radius: 0 4px 4px 0; line-height: 1.5; color: var(--fg);"
-  >
-    <strong style="color: var(--highlight);">📢 We're hiring</strong> at <a href="https://www.nuancelabs.ai/">Nuance Labs</a> — looking for <strong>research scientists</strong> and <strong>interns</strong> in MLLM / LLM. Reach out via <a href="mailto:yshao18@jhu.edu">email</a>.
-  </div>
-
+  <GithubActivity />
 </section>

@@ -1,0 +1,25 @@
+---
+import Icon from "./icons/Icon.astro";
+
+interface Props {
+  active?: "home" | "pubs" | "blog";
+}
+const { active } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+
+<header class="site-header">
+  <div class="inner">
+    <a href={`${base}/`} class="brand plain-link">Yiwen Shao</a>
+    <nav>
+      <a href={`${base}/`} aria-current={active === "home" ? "page" : undefined}>Homepage</a>
+      <a href={`${base}/publications/`} aria-current={active === "pubs" ? "page" : undefined}>Publications</a>
+      <a href={`${base}/blog/`} aria-current={active === "blog" ? "page" : undefined}>Blog</a>
+    </nav>
+    <span class="spacer"></span>
+    <button type="button" data-theme-toggle class="toggle" aria-label="Toggle dark mode">
+      <span class="block dark:hidden"><Icon name="moon" /></span>
+      <span class="hidden dark:block"><Icon name="sun" /></span>
+    </button>
+  </div>
+</header>
