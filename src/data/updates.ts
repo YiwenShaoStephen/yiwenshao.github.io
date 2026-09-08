@@ -39,7 +39,7 @@ export const updates: UpdateEntry[] = [
   {
     date: "2026-01",
     kind: "paper",
-    body: '<a class="venue-badge" href="https://cvpr.thecvf.com/">CVPR 2026</a> 1 paper accepted: <a href="https://rorizzz.github.io/images/2026_CVPR.pdf"><strong>UTS</strong></a>',
+    body: '<a class="venue-badge" href="https://cvpr.thecvf.com/">CVPR 2026</a> 1 paper accepted: <a href="https://openaccess.thecvf.com/content/CVPR2026/html/Zhou_Unlocking_Strong_Supervision_A_Data-Centric_Study_of_General-Purpose_Audio_Pre-Training_CVPR_2026_paper.html"><strong>UTS</strong></a>',
   },
   {
     date: "2026-01",
@@ -69,7 +69,7 @@ export const updates: UpdateEntry[] = [
   {
     date: "2024-09",
     kind: "experience",
-    body: 'Joined <a href="https://ailab.tencent.com/ailab/en/index/">Tencent AI Lab (Bellevue)</a> as Senior Research Scientist.',
+    body: 'Joined Tencent AI Lab (Bellevue) as Senior Research Scientist.',
   },
   {
     date: "2024-09",

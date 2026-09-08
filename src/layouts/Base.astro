@@ -52,11 +52,8 @@ const imageUrl = new URL(
     <script is:inline>
       (function () {
         try {
-          var stored = localStorage.getItem("theme");
-          var prefersDark = window.matchMedia(
-            "(prefers-color-scheme: dark)"
-          ).matches;
-          var dark = stored ? stored === "dark" : prefersDark;
+          // Default to light; only go dark if the visitor picked it before.
+          var dark = localStorage.getItem("theme") === "dark";
           if (dark) document.documentElement.classList.add("dark");
         } catch (e) {}
       })();

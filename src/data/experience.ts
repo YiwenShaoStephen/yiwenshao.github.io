@@ -22,9 +22,9 @@ export const experience: ExperienceItem[] = [
     logo: "images/nuancelabs-logo.png",
   },
   {
-    role: "Senior Researcher",
-    org: "Tencent AI Lab & Hunyuan",
-    orgHref: "https://hunyuan.tencent.com/",
+    role: "Audio Understanding Lead",
+    org: "Tencent HY & AI Lab",
+    orgHref: "https://github.com/Tencent-Hunyuan",
     location: "Bellevue",
     period: "2024.09 — 2026.04",
     advisorLinks: [
@@ -34,7 +34,7 @@ export const experience: ExperienceItem[] = [
       },
     ],
     bullets: [
-      "<strong>Hunyuan Speech 3.0</strong>: Lead audio encoder pretraining; contributor on post-training (SFT, RL).",
+      '<strong><a href="https://cloud.tencent.com/document/product/1093/135476">Hy ASR 3.0</a></strong>: Lead audio encoder pretraining; contributor on post-training (SFT, RL).',
       '<strong>AI Lab Frontier Exploration</strong>: Lead speech &amp; audio understanding for the native MLLM; founded <a class="ecosystem-badge" href="https://github.com/AudenAI/Auden"><img src="images/auden-logo.png" alt="" /><span>Auden</span></a>.',
       "<strong>Hunyuan Speech 1.0</strong>: Tencent's first LLM-ASR; 0&rarr;1 launch in <a href=\"https://yuanbao.tencent.com/\">Yuanbao</a>. Main ASR contributor.",
     ],
@@ -43,7 +43,6 @@ export const experience: ExperienceItem[] = [
   {
     role: "Research Intern",
     org: "Tencent AI Lab",
-    orgHref: "https://ailab.tencent.com/ailab/en/index/",
     location: "Bellevue",
     period: "2021 — 2024 (multiple terms)",
     advisor: "Shi-Xiong Zhang, Dong Yu",

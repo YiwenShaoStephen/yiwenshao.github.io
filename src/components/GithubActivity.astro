@@ -83,7 +83,7 @@ const dayMarks = [
     <section class="gh" id="activity">
       <div class="gh-meta">
         <span class="lbl">GITHUB</span>
-        <span>{total.toLocaleString()} contributions in the past year</span>
+        <span class="gh-total">{total.toLocaleString()} contributions in the past year</span>
         <a href={`https://github.com/${user}`}>@{user}</a>
       </div>
 
@@ -201,3 +201,92 @@ const dayMarks = [
   .scale i[data-l="4"] { background: var(--g4); }
   .scale span { margin: 0 2px; }
 </style>
+
+<script is:inline define:vars={{ user, CELL, GAP, TOP, LEFT, MONTHS }}>
+  // Refresh the calendar in the visitor's browser so it stays current between
+  // builds. GitHub's own endpoint sends no CORS header, so we use a public
+  // mirror. Any failure silently leaves the build-time chart in place.
+  (async () => {
+    const root = document.getElementById("activity");
+    if (!root) return;
+    const svg = root.querySelector("svg");
+    if (!svg) return;
+    const NS = "http://www.w3.org/2000/svg";
+    // Astro compiles scoped styles to `.c[data-astro-cid-xxxx]`, so nodes we
+    // build here must carry the same attribute or they lose every fill rule.
+    const scope = Array.prototype.map
+      .call(svg.attributes, (a) => a.name)
+      .find((n) => n.indexOf("data-astro-cid-") === 0);
+    const el = (tag, attrs, text) => {
+      const n = document.createElementNS(NS, tag);
+      for (const k in attrs) n.setAttribute(k, attrs[k]);
+      if (scope) n.setAttribute(scope, "");
+      if (text != null) n.textContent = text;
+      return n;
+    };
+    try {
+      const res = await fetch(
+        `https://github-contributions-api.jogruber.de/v4/${user}?y=last`,
+        { cache: "no-store" }
+      );
+      if (!res.ok) return;
+      const data = await res.json();
+      const days = data && data.contributions;
+      if (!Array.isArray(days) || days.length === 0) return;
+
+      const lead = new Date(days[0].date + "T00:00:00Z").getUTCDay();
+      const cells = Array(lead).fill(null).concat(days);
+      const weeks = Math.ceil(cells.length / 7);
+      const W = LEFT + weeks * (CELL + GAP);
+      const H = TOP + 7 * (CELL + GAP);
+
+      const frag = document.createDocumentFragment();
+      let lastMonth = -1;
+      cells.forEach((c, i) => {
+        if (!c || i % 7 !== 0) return;
+        const m = new Date(c.date + "T00:00:00Z").getUTCMonth();
+        if (m === lastMonth) return;
+        lastMonth = m;
+        frag.appendChild(
+          el("text", { class: "ml", x: LEFT + Math.floor(i / 7) * (CELL + GAP), y: 9 }, MONTHS[m])
+        );
+      });
+      [[1, "Mon"], [3, "Wed"], [5, "Fri"]].forEach(([row, label]) => {
+        frag.appendChild(
+          el("text", { class: "dl", x: 0, y: TOP + row * (CELL + GAP) + CELL - 1 }, label)
+        );
+      });
+      cells.forEach((c, i) => {
+        if (!c) return;
+        const rect = el("rect", {
+          class: "c",
+          "data-l": c.level,
+          x: LEFT + Math.floor(i / 7) * (CELL + GAP),
+          y: TOP + (i % 7) * (CELL + GAP),
+          width: CELL,
+          height: CELL,
+          rx: 2,
+        });
+        rect.appendChild(
+          el("title", {}, `${c.count === 0 ? "No contributions" : c.count + " contributions"} on ${c.date}`)
+        );
+        frag.appendChild(rect);
+      });
+
+      const total =
+        (data.total && data.total.lastYear) != null
+          ? data.total.lastYear
+          : days.reduce((n, d) => n + d.count, 0);
+
+      svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+      svg.setAttribute("width", W);
+      svg.setAttribute("aria-label", `${total} GitHub contributions in the past year`);
+      svg.replaceChildren(frag);
+
+      const label = root.querySelector(".gh-total");
+      if (label) label.textContent = `${total.toLocaleString()} contributions in the past year`;
+    } catch {
+      /* keep the build-time chart */
+    }
+  })();
+</script>

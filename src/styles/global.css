@@ -149,6 +149,12 @@ a:hover {
   line-height: 1.5;
   color: var(--fg-2);
 }
+.side-prev {
+  margin: 0.35rem 0 0;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--fg-3);
+}
 .side-logo { margin-top: 1rem; }
 .side-logo img { height: 20px; }
 

@@ -67,14 +67,14 @@ export const recentWorks: WorkGroup[] = [
       },
       {
         title:
-          "AZEROS: Extending LLM to Speech with Self-Generated Instruction-Free Tuning",
+          "AzeroS: Extending LLM to Speech with Self-Generated Instruction-Free Tuning",
         authors:
           '<em class="me">Yiwen Shao<sup>*†</sup></em>, Wei Liu<sup>*</sup>, Jiahong Li<sup>*</sup>, Tianzi Wang, Kun Wei, Meng Yu, Dong Yu',
         description:
           "Self-generated instruction-free tuning eliminates task-specific data, achieving SOTA on VoiceBench and AIR-Bench with minimal training.",
         thumb: "images/azeros.png",
         venue: "Tech Report 2026",
-        venueHref: "https://arxiv.org/pdf/2601.06086",
+        venueHref: "/yiwenshao.github.io/papers/azeros",
         links: [
           {
             kind: "github",
@@ -131,7 +131,7 @@ export const recentWorks: WorkGroup[] = [
           "Data-centric strong-supervision audio pretraining with high-fidelity captions and unified tags across speech, music, environmental sounds.",
         thumb: "images/tag.png",
         venue: "CVPR 2026",
-        venueHref: "https://rorizzz.github.io/images/2026_CVPR.pdf",
+        venueHref: "https://openaccess.thecvf.com/content/CVPR2026/html/Zhou_Unlocking_Strong_Supervision_A_Data-Centric_Study_of_General-Purpose_Audio_Pre-Training_CVPR_2026_paper.html",
         links: [
           {
             kind: "github",

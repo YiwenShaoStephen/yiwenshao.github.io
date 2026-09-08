@@ -2,7 +2,7 @@ export const site = {
   name: "Yiwen Shao",
   title: "Yiwen Shao — AI Researcher",
   description:
-    "Founding Research Scientist at Nuance Labs, building full-duplex multimodal LLMs. Founder of Auden. Previously at Tencent AI Lab & Hunyuan.",
+    "Founding Research Scientist at Nuance Labs, building full-duplex multimodal LLMs. Founder of Auden. Previously Audio Understanding Lead at Tencent HY & AI Lab, working on audio representation learning and large audio-language models.",
   role: "Founding Research Scientist",
   affiliation: {
     name: "Nuance Labs",
